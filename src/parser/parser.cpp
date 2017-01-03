@@ -7,8 +7,15 @@ using namespace std;
 
 Parser::Parser(string filename_)
 {
+  string line;
   filename = filename_;
   file.open(filename);
+  if(file.is_open() == false) cerr << "File: " << filename << " did not open...\n";
+
+  if(file.peek() == 'D' || file.peek() == 'S') {
+    getline(file, line);
+    cout << "Workload File: " << line << "\n";
+  }
   count=0;
 }
 
@@ -41,7 +48,7 @@ int Parser::getQuery(uint32_t &me, uint32_t &neighbor)
       //cout << line << endl;
       if(line[0]=='F') { count++; return GUST; }
       istringstream iss(line);
-      if (!(iss >> action >> me >> neighbor)) { return STOP; } // error
+      if (!(iss >> action >> me >> neighbor)) { cerr << "Query Parser: Error\n"; return STOP; } // error
       count++;
       if(action[0]=='Q') return QUESTION;
       else if(action[0]=='A') return INSERTION;

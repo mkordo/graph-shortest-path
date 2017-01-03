@@ -15,13 +15,27 @@ Node::Node(uint32_t size_)
   current = 0;
 
   neighbor = (uint32_t*) malloc(sizeof(uint32_t) * size);
-  version = (uint32_t*) malloc(sizeof(uint32_t) * size);
+  //version = (uint32_t*) malloc(sizeof(uint32_t) * size);
 
   if(neighbor==NULL) { std::cerr << "Node Constructor: Malloc" << std::endl; }
-  if(version==NULL) { std::cerr << "Node Constructor: Malloc" << std::endl; }
+  //if(version==NULL) { std::cerr << "Node Constructor: Malloc" << std::endl; }
 
   for(i=0; i<size; i++) neighbor[i]=-1;
-  for(i=0; i<size; i++) version[i]=0;
+  //for(i=0; i<size; i++) version[i]=0;
+}
+
+Node::Node(uint32_t size_, uint32_t *neighbor_)
+{
+  //cout << "Create node\n";
+
+  int i;
+  size = size_;
+  current = 0;
+
+  //version = (uint32_t*) calloc(size, sizeof(uint32_t));
+  //if(version==NULL) { std::cerr << "Node Constructor: Malloc" << std::endl; }
+
+  neighbor = neighbor_;
 }
 
 Node::~Node()
@@ -29,14 +43,14 @@ Node::~Node()
   //cout << "Destroy node : "; Node::print();
 
   free(neighbor);
-  free(version);
+  //free(version);
 }
 
 bool Node::insert(uint32_t neighbor_, uint32_t version_)
 {
   if(current<size) {
     neighbor[current] = neighbor_;
-    version[current] = version_;
+    //version[current] = version_;
     current++;
   }
   else {
@@ -60,8 +74,8 @@ void Node::expand()
 {
   size *= 2;
   neighbor = (uint32_t*) realloc(neighbor, sizeof(uint32_t) * size);
-  version = (uint32_t*) realloc(version, sizeof(uint32_t) * size);
+  //version = (uint32_t*) realloc(version, sizeof(uint32_t) * size);
 
   if(neighbor==NULL) { std::cerr << "Node Expand: Realloc" << std::endl; }
-  if(version==NULL) { std::cerr << "Node Expand: Realloc" << std::endl; }
+  //if(version==NULL) { std::cerr << "Node Expand: Realloc" << std::endl; }
 }

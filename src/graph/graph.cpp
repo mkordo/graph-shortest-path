@@ -10,7 +10,7 @@ using namespace std;
 template <class T>
 Graph<T>::Graph(uint32_t size_)
 {
-  cout << "Create Graph\n";
+  //cout << "Create Graph\n";
   int i;
   size = size_;
   if(size<=1) cerr << "Given graph size is not valid" << endl;
@@ -25,7 +25,7 @@ template <class T>
 Graph<T>::~Graph()
 {
   int i;
-  cout << "Destroy Graph\n";
+  //cout << "Destroy Graph\n";
 
   for(i=0; i<size; i++)
     if(buffer[i]!=NULL)
@@ -56,6 +56,23 @@ void Graph<T>::expand(uint32_t newNode)
 
   size=newSize;
   cout << "Expand Graph : New size " << size << "\n";
+}
+
+template <class T>
+void Graph<T>::resize(uint32_t newSize)
+{
+  int i;
+  if(size >= newSize) {
+    cerr << "Graph Resize: Invalid new size\n";
+    return;
+  }
+  buffer = (T**) realloc(buffer, sizeof(T*) * newSize);
+  if(buffer==NULL) { cerr << "Graph Resize: realloc" << endl; }
+
+  for(i=size; i<newSize; i++) buffer[i] = NULL;
+
+  size=newSize;
+  cout << "Resize Graph : New size " << size << "\n";
 }
 
 template <class T>

@@ -7,37 +7,38 @@
 #include "graph/node.h"
 #include "graph/graph.h"
 #include "parser/parser.h"
+#include "statistics/statistics.h"
 
 using namespace std;
 
 int cmd(int, char**, string&, string&);
 void createGraph(Graph<Node>&, Graph<Node>&, Graph<HashNode>&, string);
-void runQueries(string);
+void runQueries(Graph<Node>&, Graph<Node>&, Graph<HashNode>&, string);
 
 int main(int argc, char** argv)
 {
   string filename, filenameQA;
+  Statistics stats;
 
   /////////////////////////
-  clock_t begin = clock();
+  stats.Start();
 
   cmd(argc, argv, filename, filenameQA);
 
   Graph<Node> graphOut;
   Graph<Node> graphIn;
   Graph<HashNode> graphDupl;
-  cout << "\nInitialized Graphs\n\n";
 
   createGraph(graphOut, graphIn, graphDupl, filename);
   //graphDupl.print();
   //graphOut.print();
   //graphIn.print();
-  runQueries(filenameQA);
+  stats.CreatedGraphs();
 
-  clock_t end = clock();
-  double elapsedTime = double(end - begin) / CLOCKS_PER_SEC;
+  runQueries(graphOut, graphIn, graphDupl, filenameQA);
+  stats.ExecutedQueries();
 
-  cout << "\nElapsed time : " << elapsedTime << " secs\n\n";
+  stats.Print();
   return 0;
 }
 
@@ -50,26 +51,32 @@ void createGraph(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &g
   {
     //reader.printRow(me, neighbor);
     if( graphDupl.insert(me, neighbor) == true ) {
-      graphOut.insert(me, neighbor);
+      //graphOut.insert(me, neighbor);
       graphIn.insert(neighbor, me);
-    }
-    else {
-
     }
   }
   //cout << "\n" << reader.getCount() << "\n";
 }
 
-void runQueries(string filename)
+void runQueries(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &graphDupl, string filename)
 {
   int type;
   uint32_t me, neighbor;
   Parser reader(filename);
 
-  while( ( type = reader.getQuery(me, neighbor) ) != STOP )
-  {
+  while( ( type = reader.getQuery(me, neighbor) ) != STOP ) {
     //reader.printQuery(type, me, neighbor);
+    if(type == QUESTION) {
+
+    }
+    else if(type == INSERTION) {
+      if( graphDupl.insert(me, neighbor) == true ) {
+        //graphOut.insert(me, neighbor);
+        graphIn.insert(neighbor, me);
+      }
+    }
   }
+
   //cout << "\n" << reader.getCount() << "\n";
 }
 

@@ -14,6 +14,7 @@ class Graph
     ~Graph();
 
     bool insert(uint32_t, uint32_t);
+    void resize(uint32_t);
     void print();
 
   private:

@@ -1,4 +1,4 @@
-OBJ = bin/main.o bin/graph.o bin/node.o bin/parser.o bin/hash.o
+OBJ = bin/main.o bin/graph.o bin/node.o bin/parser.o bin/hash.o bin/statistics.o
 EXE = bin/shortest-path
 DIR = bin
 
