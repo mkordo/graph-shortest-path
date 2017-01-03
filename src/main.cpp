@@ -7,6 +7,8 @@
 #include "graph/node.h"
 #include "graph/graph.h"
 #include "parser/parser.h"
+#include "queue/queue.h"
+#include "search/search.h"
 #include "statistics/statistics.h"
 
 using namespace std;
@@ -15,10 +17,11 @@ int cmd(int, char**, string&, string&);
 void createGraph(Graph<Node>&, Graph<Node>&, Graph<HashNode>&, string);
 void runQueries(Graph<Node>&, Graph<Node>&, Graph<HashNode>&, string);
 
+Statistics stats;
+
 int main(int argc, char** argv)
 {
   string filename, filenameQA;
-  Statistics stats;
 
   /////////////////////////
   stats.Start();

@@ -1,5 +1,5 @@
-OBJ = bin/main.o bin/graph.o bin/node.o bin/parser.o bin/hash.o bin/queue.o bin/search.o bin/statistics.o
-EXE = bin/shortest-path
+OBJ = bin/main.o bin/queue.o
+EXE = bin/test
 DIR = bin
 
 all: clearscreen create_dir $(EXE)
@@ -10,7 +10,7 @@ $(EXE): $(OBJ)
 bin/%.o: src/%.cpp
 	g++ -c -std=c++11 $< -o $@
 
-bin/%.o: src/*/%.cpp
+bin/%.o: ../src/*/%.cpp
 	g++ -c -std=c++11 $< -o $@
 
 create_dir:

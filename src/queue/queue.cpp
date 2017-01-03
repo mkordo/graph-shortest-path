@@ -1,118 +1,103 @@
 #include <iostream>
 #include <stdlib.h>
-#include <process.h>
+#include <cstdint>    /* For uint32_t */
 
 #include "queue.h"
-/*
-using namespace std;
+
+template <class T>
+Queue<T>::Queue(int size_)
+{
+  front = 0;
+  next = 0;
+  size = size_;
+
+  queue = (T*) malloc(sizeof(T) * size);
+  if(queue==NULL) { std::cerr << "Queue Constructor: Malloc" << std::endl; }
+  //std::cout << "Created queue - Size: " << size << std::endl;
+}
+
+
+template <class T>
+Queue<T>::~Queue()
+{
+  free(queue);
+  //std::cout << "Destroyed queue - Final size: " << size << "\n";
+}
+
+template <class T>
+void Queue<T>::init()
+{
+  front = 0;
+  next = 0;
+}
+
 
 template <class T>
 bool Queue<T>::isEmpty()
 {
-  if( (front==0 && rear==-1) || front==rear )
+  if( front==next )
     return true;
   else
     return false;
 }
+
 
 template <class T>
 bool Queue<T>::isFull()
 {
-  if(rear==size-1)
+  if(next==size)
     return true;
   else
     return false;
 }
 
+
 template <class T>
-void Queue<T>::atFront()
+void Queue<T>::push(T element)
 {
-  if(isEmpty())
-     cout << "Sorry the queue is empty!\n";
-  else
-     cout << "Front element of the queue is : " << queue[front] << "\n";
+  if(Queue<T>::isFull()) {
+    Queue<T>::expand();
+  }
+  queue[next++]=element;
 }
 
 template <class T>
-void Queue<T>::atRear()
+void Queue<T>::expand()
 {
-  if(isEmpty())
-     cout << "Sorry the queue is empty!\n";
-  else
-     cout << "Rear element of the queue is : " << queue[rear] << "\n";
+  size *= 2;
+  queue = (T*) realloc(queue, sizeof(T) * size);
+  if(queue==NULL) { std::cerr << "Queue Constructor: Malloc" << std::endl; }
 }
 
 template <class T>
-void Queue<T>::insert()
+T Queue<T>::pop()
 {
-  T ele;
-  if(isFull())
-    cout << "Sorry the queue is full!\n";
-  else
-  {
-    cin >> ele;
-    queue[++rear]=ele;
+  if(Queue<T>::isEmpty())
+    return -1;
+  else {    
+    front++;
+    return queue[front-1];
   }
 }
 
+
 template <class T>
-void Queue<T>::deletion()
+void Queue<T>::print()
 {
-  if(isEmpty())
-     cout<<"\nSorry the queue is empty!";
+  if(Queue<T>::isEmpty())
+    std::cout<<"\nSorry the queue is empty!";
   else
-     cout<<"\nDeleted element of the queue is : " << queue[front++];
-}
-
-template <class T>
-void Queue<T>::display()
-{
-     if(isEmpty())
-     cout<<"\nSorry the queue is empty!";
-     else
-     {
-         cout<<"\nQueue elements are : ";
-         for(int i=front;i<=rear;i++)
-         {
-                 cout<<"\t"<<queue[i];
-         }
-     }
-}
-
-int test()
-{
-    int ch;
-    Queue<int> q(10);
-    do
+  {
+    std::cout<<"\nQueue elements are : ";
+    for(int i=front; i<next; i++)
     {
-             cout<<"\n 1.Insertion \n 2.Deletion \n 3.Display Front Element \n 4.Display Rear Element \n 5.Display Queue \n 6.Exit \n";
-             cout<<"Enter your Choice:";
-             cin>>ch;
-             switch(ch)
-             {
-                       case 1:
-                            q.insert();
-                            break;
-                       case 2:
-                            q.deletion();
-                            break;
-                       case 3:
-                            q.atfront();
-                            break;
-                       case 4:
-                            q.atrear();
-                            break;
-                       case 5:
-                            q.display();
-                            break;
-                       case 6:
-                            exit(0);
-                            break;
-                       default: cout<<"\nWrong Choice Entered!";
-
-             }
-    }while(ch<=6);
-    system("pause");
-    return 0;
+      std::cout << "\t" << queue[i];
+    }
+  }
+  std::cout << "\n";
 }
-*/
+
+
+/* Inform the compiler about which types we are going to use the template */
+template class Queue<uint32_t>;
+
