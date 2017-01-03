@@ -21,6 +21,7 @@ class Queue
 	T pop();
 	void print();
 	void expand();
+	int count();
 };
 
 #endif

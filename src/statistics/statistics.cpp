@@ -28,6 +28,11 @@ void Statistics::ExecutedQueries() {
 }
 
 void Statistics::Print() {
+	std::cout << "\n\nStatistics: \n\n";
+	std::cout << "Graph Creation : " << double(created - start) / CLOCKS_PER_SEC << " secs\n";
+
+	std::cout << "Query Execution : " << double(executed - created) / CLOCKS_PER_SEC << " secs\n";
+
 	elapsedTime = double(executed - start) / CLOCKS_PER_SEC;
-	std::cout << "Elapsed time : " << elapsedTime << " secs\n\n";
+	std::cout << "Total time : " << elapsedTime << " secs\n\n";
 }

@@ -3,8 +3,6 @@
 #include <cstdint>  /* For uint32_t */
 #include <ctime>
 
-#include "graph/hash.h"
-#include "graph/node.h"
 #include "graph/graph.h"
 #include "parser/parser.h"
 #include "queue/queue.h"
@@ -66,11 +64,12 @@ void runQueries(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &gr
   int type;
   uint32_t me, neighbor;
   Parser reader(filename);
+  Search search;
 
   while( ( type = reader.getQuery(me, neighbor) ) != STOP ) {
     //reader.printQuery(type, me, neighbor);
     if(type == QUESTION) {
-
+      search.ShortestPath(graphDupl, graphIn, me, neighbor);
     }
     else if(type == INSERTION) {
       if( graphDupl.insert(me, neighbor) == true ) {
@@ -79,7 +78,6 @@ void runQueries(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &gr
       }
     }
   }
-
   //cout << "\n" << reader.getCount() << "\n";
 }
 

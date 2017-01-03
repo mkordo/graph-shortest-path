@@ -1,8 +1,6 @@
 #include <iostream>
 #include <string>
 
-#include "node.h"
-#include "hash.h"
 #include "graph.h"
 
 using namespace std;
@@ -73,6 +71,14 @@ void Graph<T>::resize(uint32_t newSize)
 
   size=newSize;
   cout << "Resize Graph : New size " << size << "\n";
+}
+
+template <class T>
+bool Graph<T>::hasNode(uint32_t me)
+{
+  if(me>size) return false;                // Node is out of bounds
+  else if(buffer[me]==NULL) return false;  // Node does not have neighbors
+  else return true;
 }
 
 template <class T>

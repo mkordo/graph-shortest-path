@@ -9,7 +9,9 @@ void testQueue();
 
 int main(int argc, char** argv)
 {
-  testQueue();
+//  testQueue();
+
+  cout << sizeof(bool) << endl;
 
   cout << "Ended test, exiting...\n";
   return 0;

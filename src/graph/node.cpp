@@ -20,7 +20,7 @@ Node::Node(uint32_t size_)
   if(neighbor==NULL) { std::cerr << "Node Constructor: Malloc" << std::endl; }
   //if(version==NULL) { std::cerr << "Node Constructor: Malloc" << std::endl; }
 
-  for(i=0; i<size; i++) neighbor[i]=-1;
+  //for(i=0; i<size; i++) neighbor[i]=-1;
   //for(i=0; i<size; i++) version[i]=0;
 }
 

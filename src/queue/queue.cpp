@@ -80,6 +80,12 @@ T Queue<T>::pop()
   }
 }
 
+template <class T>
+int Queue<T>::count()
+{
+  return (next - front);
+}
+
 
 template <class T>
 void Queue<T>::print()
