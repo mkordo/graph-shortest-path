@@ -1,5 +1,5 @@
 #include <iostream>
-#include <string>
+#include <string.h>
 
 #include "graph.h"
 
@@ -14,9 +14,11 @@ Graph<T>::Graph(uint32_t size_)
   if(size<=1) cerr << "Given graph size is not valid" << endl;
   last = 0;
   version = 0;
-  buffer = (T**) malloc(sizeof(T*) * size);
+  buffer = (T*) malloc(sizeof(T) * size);
   if(buffer==NULL) cerr << "Graph Constructor : Malloc" << endl;
-  for(i=0; i<size; i++) buffer[i] = NULL;
+  new (buffer+0) T();
+  for(i=0; i<size; i++) new (buffer+i) T();
+  //(i=0; i<size; i++) memcpy ( buffer+i, buffer, sizeof(T) );
 }
 
 template <class T>
@@ -24,10 +26,8 @@ Graph<T>::~Graph()
 {
   int i;
   //cout << "Destroy Graph\n";
-
   for(i=0; i<size; i++)
-    if(buffer[i]!=NULL)
-      delete buffer[i];
+    (buffer+i)->~T();
   free(buffer);
 }
 
@@ -36,8 +36,8 @@ bool Graph<T>::insert(uint32_t me, uint32_t neighbor)
 {
   if(last < me) last = me;
   if(size <= me) Graph<T>::expand(me);
-  if(buffer[me]==NULL) buffer[me] = new T;
-  return buffer[me]->insert(neighbor, version);
+  if(buffer[me].neighbor==NULL) buffer[me].init();
+  return buffer[me].insert(neighbor, version);
 }
 
 template <class T>
@@ -47,10 +47,12 @@ void Graph<T>::expand(uint32_t newNode)
   uint32_t newSize;
   newSize = size*2;
   while(newSize<=newNode) { newSize *= 2; }
-  buffer = (T**) realloc(buffer, sizeof(T*) * newSize);
+  buffer = (T*) realloc(buffer, sizeof(T) * newSize);
   if(buffer==NULL) { cerr << "Graph Expand: realloc" << endl; }
 
-  for(i=size; i<newSize; i++) buffer[i] = NULL;
+  for(i=size; i<newSize; i++)  new (buffer+i) T();
+  //new (buffer+size) T();
+  //for(i=size+1; i<newSize; i++) memcpy ( buffer+i, buffer+size, sizeof(T) );
 
   size=newSize;
   cout << "Expand Graph : New size " << size << "\n";
@@ -64,10 +66,10 @@ void Graph<T>::resize(uint32_t newSize)
     cerr << "Graph Resize: Invalid new size\n";
     return;
   }
-  buffer = (T**) realloc(buffer, sizeof(T*) * newSize);
+  buffer = (T*) realloc(buffer, sizeof(T) * newSize);
   if(buffer==NULL) { cerr << "Graph Resize: realloc" << endl; }
 
-  for(i=size; i<newSize; i++) buffer[i] = NULL;
+  for(i=size; i<newSize; i++) new (buffer+i) T();
 
   size=newSize;
   cout << "Resize Graph : New size " << size << "\n";
@@ -77,7 +79,7 @@ template <class T>
 bool Graph<T>::hasNode(uint32_t me)
 {
   if(me>size) return false;                // Node is out of bounds
-  else if(buffer[me]==NULL) return false;  // Node does not have neighbors
+  else if(buffer[me].neighbor==NULL) return false;  // Node does not have neighbors
   else return true;
 }
 
@@ -87,9 +89,9 @@ void Graph<T>::print()
   int i;
   cout << "Print graph: \n";
   for(i=0; i<last+1; i++) {
-    if(buffer[i]!=NULL) {
+    if(buffer[i].neighbor!=NULL) {
       cout << i << ": \t";
-      buffer[i]->print();
+      buffer[i].print();
     }
   }
   cout << "\n";

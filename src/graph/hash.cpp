@@ -10,13 +10,16 @@ using namespace std;
 HashNode::HashNode(uint32_t size_)
 {
   //cout << "Create hashed node\n";
-  int i;
   size = size_;
   inserted = 0;
-
-  size = HashNode::primeNext(size);
+  neighbor=NULL;
+  //size = HashNode::primeNext(size);
   //cout << "Size " << size << endl;
+}
 
+void HashNode::init()
+{
+  int i;
   neighbor = (uint32_t*) malloc(sizeof(uint32_t) * size);
   if(neighbor==NULL) { std::cerr << "Node Constructor: Malloc" << std::endl; }
   for(i=0; i<size; i++) neighbor[i]=-1;
@@ -24,13 +27,16 @@ HashNode::HashNode(uint32_t size_)
 
 HashNode::~HashNode()
 {
-  //cout << "Destroy hashed node : "; Node::print();
-  free(neighbor);
+  //cout << "Destroy hashed node : ";
+  if(neighbor!=NULL) {
+    //HashNode::print();
+    free(neighbor);
+  }
 }
 
 bool HashNode::insert(uint32_t neighbor_, uint32_t version_)
 {
-  if( ( ((double) inserted)/size ) > 0.7 ) {
+  if( ( ((double) inserted)/size ) > 0.5 ) {
     HashNode::expand();
   }
 
@@ -75,7 +81,7 @@ void HashNode::expand()
 
   oldsize=size;
   size *= 2;
-  size = HashNode::primeNext(size);
+  //size = HashNode::primeNext(size);
   //std::cout << "doubled... New size: " << size << std::endl;
   old = neighbor;
   neighbor = (uint32_t*) malloc(sizeof(uint32_t) * size);

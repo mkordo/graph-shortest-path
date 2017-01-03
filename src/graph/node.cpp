@@ -9,19 +9,22 @@ using namespace std;
 Node::Node(uint32_t size_)
 {
   //cout << "Create node\n";
-
   int i;
   size = size_;
   current = 0;
+  neighbor=NULL;
+}
 
-  neighbor = (uint32_t*) malloc(sizeof(uint32_t) * size);
-  //version = (uint32_t*) malloc(sizeof(uint32_t) * size);
+void Node::init()
+{
+    neighbor = (uint32_t*) malloc(sizeof(uint32_t) * size);
+    //version = (uint32_t*) malloc(sizeof(uint32_t) * size);
 
-  if(neighbor==NULL) { std::cerr << "Node Constructor: Malloc" << std::endl; }
-  //if(version==NULL) { std::cerr << "Node Constructor: Malloc" << std::endl; }
+    if(neighbor==NULL) { std::cerr << "Node Constructor: Malloc" << std::endl; }
+    //if(version==NULL) { std::cerr << "Node Constructor: Malloc" << std::endl; }
 
-  //for(i=0; i<size; i++) neighbor[i]=-1;
-  //for(i=0; i<size; i++) version[i]=0;
+    //for(i=0; i<size; i++) neighbor[i]=-1;
+    //for(i=0; i<size; i++) version[i]=0;
 }
 
 Node::Node(uint32_t size_, uint32_t *neighbor_)
@@ -42,8 +45,10 @@ Node::~Node()
 {
   //cout << "Destroy node : "; Node::print();
 
-  free(neighbor);
+  if(neighbor!=NULL) {
+    free(neighbor);
   //free(version);
+  }
 }
 
 bool Node::insert(uint32_t neighbor_, uint32_t version_)

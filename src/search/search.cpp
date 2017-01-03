@@ -59,5 +59,5 @@ void Search::init(uint32_t sizeIn, uint32_t sizeOut)
 
 	/* Initialize queues */
 	frontSearch.init();
-    backSearch.init();
+  backSearch.init();
 }

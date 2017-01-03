@@ -72,10 +72,12 @@ void runQueries(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &gr
       search.ShortestPath(graphDupl, graphIn, me, neighbor);
     }
     else if(type == INSERTION) {
+
       if( graphDupl.insert(me, neighbor) == true ) {
         //graphOut.insert(me, neighbor);
         graphIn.insert(neighbor, me);
       }
+
     }
   }
   //cout << "\n" << reader.getCount() << "\n";

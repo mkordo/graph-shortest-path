@@ -11,7 +11,7 @@ class Graph
     uint32_t version;
     uint32_t size;
     uint32_t last;
-    T* *buffer;
+    T* buffer;
 
     Graph(uint32_t size_ = 100);
     ~Graph();

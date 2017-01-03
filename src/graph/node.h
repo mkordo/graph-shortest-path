@@ -17,6 +17,7 @@ class Node
 
     bool insert(uint32_t neighbor_, uint32_t version_);
     void print();
+    void init();
 
   private:
     void expand();
