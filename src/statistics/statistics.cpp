@@ -2,6 +2,8 @@
 
 #include "statistics.h"
 
+using namespace std;
+
 Statistics::Statistics() {
     sizeGraphOut = 0;
     sizeGraphIn = 0;
@@ -10,34 +12,60 @@ Statistics::Statistics() {
     duplicatesQA = 0;
     insertions = 0;
     queries = 0;
+
+    sizeGraphOut = 0;
+    sizeGraphIn = 0;
+    sizeGraphDupl = 0;
+
+    sizeGraphUsedOut = 0;
+    sizeGraphUsedIn = 0;
+    sizeGraphUsedDupl = 0;
 }
 
 Statistics::~Statistics() {}
 
 void Statistics::Start() {
-	std::cout << "Started Program\n\n";
+	cout << "Started Program\n\n";
 	start = clock();
 }
 
 void Statistics::CreatedGraphs() {
-	std::cout << "\nCreated Graphs\n\n";
 	created = clock();
+	cout << "\nCreated Graphs\n\nExecuting Queries...\n";
 }
 
 void Statistics::ExecutedQueries() {
 	executed = clock();
 }
 
+void Statistics::finalSizes(uint32_t out, uint32_t in, uint32_t dupl)
+{
+  sizeGraphOut = out;
+  sizeGraphIn = in;
+  sizeGraphDupl = dupl;
+}
+void Statistics::finalUsedSizes(uint32_t out, uint32_t in, uint32_t dupl)
+{
+  sizeGraphUsedOut = out;
+  sizeGraphUsedIn = in;
+  sizeGraphUsedDupl = dupl;
+}
+
 void Statistics::Print() {
-	std::cout << "\nStatistics: \n\n";
+	cout << "\nStatistics: \n\n";
 
-  std::cout << "Duplicates in creation : " << duplicates << "\n";
-  std::cout << "Duplicates in queries : " << duplicatesQA << "\n\n";
+  cout << "Duplicates in creation : " << duplicates << "\n";
+  cout << "Duplicates in queries : " << duplicatesQA << "\n\n";
 
-	std::cout << "Graph Creation : " << double(created - start) / CLOCKS_PER_SEC << " secs\n";
+  cout << "Sise of graph used: Out: " << sizeGraphUsedOut << "\n";
+  cout << "Sise of graph used: In: " << sizeGraphUsedIn << "\n";
+  cout << "Sise of graph used: Dupl: " << sizeGraphUsedDupl << "\n\n";
 
-	std::cout << "Query Execution : " << double(executed - created) / CLOCKS_PER_SEC << " secs\n";
+  cout << "Sise of graph: Out: " << sizeGraphOut << "\n";
+  cout << "Sise of graph: In: " << sizeGraphIn << "\n";
+  cout << "Sise of graph: Dupl: " << sizeGraphDupl << "\n\n";
 
-	elapsedTime = double(executed - start) / CLOCKS_PER_SEC;
-	std::cout << "Total time : " << elapsedTime << " secs\n\n";
+	cout << "Graph Creation : " << double(created - start) / CLOCKS_PER_SEC << " secs\n";
+	cout << "Query Execution : " << double(executed - created) / CLOCKS_PER_SEC << " secs\n";
+	cout << "Total time : " << double(executed - start) / CLOCKS_PER_SEC << " secs\n\n";
 }

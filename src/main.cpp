@@ -39,6 +39,8 @@ int main(int argc, char** argv)
   runQueries(graphOut, graphIn, graphDupl, filenameQA);
   stats.ExecutedQueries();
 
+  stats.finalSizes(graphOut.size, graphIn.size, graphDupl.size);
+  stats.finalUsedSizes(graphOut.last, graphIn.last, graphDupl.last);
   stats.Print();
   return 0;
 }

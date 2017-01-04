@@ -13,18 +13,17 @@ Node::Node(uint32_t size_)
   size = size_;
   current = 0;
   neighbor=NULL;
+  current=1;
 }
 
-void Node::init()
+void Node::init(uint32_t size_)
 {
+    size = size_;
     neighbor = (uint32_t*) malloc(sizeof(uint32_t) * size);
     //version = (uint32_t*) malloc(sizeof(uint32_t) * size);
 
     if(neighbor==NULL) { std::cerr << "Node Constructor: Malloc" << std::endl; }
     //if(version==NULL) { std::cerr << "Node Constructor: Malloc" << std::endl; }
-
-    //for(i=0; i<size; i++) neighbor[i]=-1;
-    //for(i=0; i<size; i++) version[i]=0;
 }
 
 Node::Node(uint32_t size_, uint32_t *neighbor_)

@@ -13,13 +13,15 @@ HashNode::HashNode(uint32_t size_)
   size = size_;
   inserted = 0;
   neighbor=NULL;
+  inserted = 1;
   //size = HashNode::primeNext(size);
   //cout << "Size " << size << endl;
 }
 
-void HashNode::init()
+void HashNode::init(uint32_t size_)
 {
   int i;
+  size = size_;
   neighbor = (uint32_t*) malloc(sizeof(uint32_t) * size);
   if(neighbor==NULL) { std::cerr << "Node Constructor: Malloc" << std::endl; }
   //for(i=0; i<size; i++) neighbor[i]=UINT32_MAX;

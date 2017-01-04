@@ -17,8 +17,8 @@ Graph<T>::Graph(uint32_t size_)
   buffer = (T*) malloc(sizeof(T) * size);
   if(buffer==NULL) cerr << "Graph Constructor : Malloc" << endl;
   new (buffer+0) T();
-  for(i=0; i<size; i++) new (buffer+i) T();
-  //(i=0; i<size; i++) memcpy ( buffer+i, buffer, sizeof(T) );
+  //for(i=0; i<size; i++) new (buffer+i) T();
+  memset(buffer, 0, sizeof(T) * size);
 }
 
 template <class T>
@@ -50,9 +50,8 @@ void Graph<T>::expand(uint32_t newNode)
   buffer = (T*) realloc(buffer, sizeof(T) * newSize);
   if(buffer==NULL) { cerr << "Graph Expand: realloc" << endl; }
 
-  for(i=size; i<newSize; i++)  new (buffer+i) T();
-  //new (buffer+size) T();
-  //for(i=size+1; i<newSize; i++) memcpy ( buffer+i, buffer+size, sizeof(T) );
+  //for(i=size; i<newSize; i++)  new (buffer+i) T();
+  memset(buffer+size, 0, sizeof(T) * (newSize-size));
 
   size=newSize;
   cout << "Expand Graph : New size " << size << "\n";
@@ -81,21 +80,21 @@ bool Graph<T>::validNode(uint32_t me)
 {
   if(me>=size) return false;                          // Node is out of bounds
   else if(buffer[me].neighbor==NULL) return false;    // Node does not have neighbors
-  else return true;
+  return true;
 }
 
 template <class T>
 bool Graph<T>::emptyNode(uint32_t me)
 {
   if(buffer[me].neighbor==NULL) return false;         // Node does not have neighbors
-  else return true;
+  return true;
 }
 
 template <class T>
 bool Graph<T>::inBounds(uint32_t me)
 {
   if(me<size) return true;                            // Node is in bounds
-  else return false;
+  return false;
 }
 
 template <class T>

@@ -15,7 +15,7 @@ class HashNode
 
     bool insert(uint32_t neighbor_, uint32_t version_);
     void print();
-    void init();
+    void init(uint32_t size_ = 103);
 
   private:
     bool findCell(uint32_t);
