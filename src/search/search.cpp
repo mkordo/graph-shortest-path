@@ -21,7 +21,7 @@ Search::~Search()
 
 uint32_t Search::ShortestPath(Graph<Node>& graphOut, Graph<Node>& graphIn, uint32_t nodeA, uint32_t nodeB)
 {
-	if(graphOut.inBounds(nodeA)==false || graphIn.inBounds(nodeB)==false) return -1;
+	if(graphOut.validNode(nodeA)==false || graphIn.validNode(nodeB)==false) return -1;
 	Search::init(graphIn.size, graphOut.size);
 
 	frontSearch.push(nodeA);

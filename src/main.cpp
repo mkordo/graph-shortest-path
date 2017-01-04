@@ -57,7 +57,7 @@ void createGraph(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &g
     //*/
     ///*
     if( graphDupl.insert(me, neighbor) == true ) {
-      //graphOut.insert(me, neighbor);
+      graphOut.insert(me, neighbor);
       graphIn.insert(neighbor, me);
     }
     else stats.duplicates++;
@@ -77,7 +77,7 @@ void runQueries(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &gr
     //reader.printQuery(type, me, neighbor);
     if(type == QUESTION) {
       //search.ShortestPath(graphDupl, graphIn, me, neighbor);
-      //search.ShortestPath(graphOut, graphIn, me, neighbor);
+      search.ShortestPath(graphOut, graphIn, me, neighbor);
     }
     else if(type == INSERTION) {
       /*
@@ -86,7 +86,7 @@ void runQueries(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &gr
       //*/
       ///*
       if( graphDupl.insert(me, neighbor) == true ) {
-        //graphOut.insert(me, neighbor);
+        graphOut.insert(me, neighbor);
         graphIn.insert(neighbor, me);
       }
       else stats.duplicatesQA++;

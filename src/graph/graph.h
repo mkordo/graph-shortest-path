@@ -19,6 +19,7 @@ class Graph
     bool insert(uint32_t, uint32_t);
     void resize(uint32_t);
     void print();
+    bool validNode(uint32_t);
     bool emptyNode(uint32_t);
     bool inBounds(uint32_t);
 

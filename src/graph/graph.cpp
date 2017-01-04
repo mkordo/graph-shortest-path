@@ -75,17 +75,26 @@ void Graph<T>::resize(uint32_t newSize)
   cout << "Resize Graph : New size " << size << "\n";
 }
 
+
+template <class T>
+bool Graph<T>::validNode(uint32_t me)
+{
+  if(me>=size) return false;                          // Node is out of bounds
+  else if(buffer[me].neighbor==NULL) return false;    // Node does not have neighbors
+  else return true;
+}
+
 template <class T>
 bool Graph<T>::emptyNode(uint32_t me)
 {
-  if(buffer[me].neighbor==NULL) return false;  // Node does not have neighbors
+  if(buffer[me].neighbor==NULL) return false;         // Node does not have neighbors
   else return true;
 }
 
 template <class T>
 bool Graph<T>::inBounds(uint32_t me)
 {
-  if(me<size) return true;                // Node is in bounds
+  if(me<size) return true;                            // Node is in bounds
   else return false;
 }
 
