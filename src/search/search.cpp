@@ -45,7 +45,7 @@ void Search::init(uint32_t sizeIn, uint32_t sizeOut)
 	steps = 0;
 
 	/* Initialize visited array */
-	if(sizeIn>sizeOut) max = sizeIn;
+	if(sizeIn>=sizeOut) max = sizeIn;
 	else max = sizeOut;
 
 	if(max>size) {

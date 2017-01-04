@@ -7,6 +7,7 @@
 class Statistics
 {
   public:
+    bool pleasePrint;
 
     clock_t start;
     clock_t created;
@@ -26,7 +27,7 @@ class Statistics
     uint32_t insertions;
     uint32_t queries;
 
-    Statistics();
+    Statistics(bool pleasePrint_ = true);
     ~Statistics();
 
     void Start();

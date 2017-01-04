@@ -15,7 +15,8 @@ int cmd(int, char**, string&, string&);
 void createGraph(Graph<Node>&, Graph<Node>&, Graph<HashNode>&, string);
 void runQueries(Graph<Node>&, Graph<Node>&, Graph<HashNode>&, string);
 
-Statistics stats;
+Statistics stats(true);
+//Statistics stats(false);
 
 int main(int argc, char** argv)
 {
