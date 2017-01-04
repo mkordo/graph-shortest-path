@@ -6,6 +6,8 @@
 
 class Statistics
 {
+  public:
+
     clock_t start;
     clock_t created;
     clock_t executed;
@@ -15,10 +17,9 @@ class Statistics
     uint32_t sizeGraphIn;
 
     uint32_t duplicates;
+    uint32_t duplicatesQA;
     uint32_t insertions;
     uint32_t queries;
-
-  public:
 
     Statistics();
     ~Statistics();

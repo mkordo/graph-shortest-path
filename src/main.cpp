@@ -51,10 +51,17 @@ void createGraph(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &g
   while( reader.getRow(me, neighbor) != STOP )
   {
     //reader.printRow(me, neighbor);
+    /*
+    graphOut.insert(me, neighbor);
+    graphIn.insert(neighbor, me);
+    //*/
+    ///*
     if( graphDupl.insert(me, neighbor) == true ) {
       //graphOut.insert(me, neighbor);
       graphIn.insert(neighbor, me);
     }
+    else stats.duplicates++;
+    //*/
   }
   //cout << "\n" << reader.getCount() << "\n";
 }
@@ -69,14 +76,21 @@ void runQueries(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &gr
   while( ( type = reader.getQuery(me, neighbor) ) != STOP ) {
     //reader.printQuery(type, me, neighbor);
     if(type == QUESTION) {
-      search.ShortestPath(graphDupl, graphIn, me, neighbor);
+      //search.ShortestPath(graphDupl, graphIn, me, neighbor);
+      //search.ShortestPath(graphOut, graphIn, me, neighbor);
     }
     else if(type == INSERTION) {
-
+      /*
+      graphOut.insert(me, neighbor);
+      graphIn.insert(neighbor, me);
+      //*/
+      ///*
       if( graphDupl.insert(me, neighbor) == true ) {
         //graphOut.insert(me, neighbor);
         graphIn.insert(neighbor, me);
       }
+      else stats.duplicatesQA++;
+      //*/
 
     }
   }

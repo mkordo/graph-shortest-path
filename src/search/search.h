@@ -19,7 +19,7 @@ class Search
     Search();
     ~Search();
 
-    uint32_t ShortestPath(Graph<HashNode>&, Graph<Node>&, uint32_t, uint32_t);
+    uint32_t ShortestPath(Graph<Node>&, Graph<Node>&, uint32_t, uint32_t);
 
   private:
     void init(uint32_t, uint32_t);

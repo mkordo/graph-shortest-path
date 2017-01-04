@@ -19,9 +19,9 @@ Search::~Search()
 	if(visitedOut!=NULL) free(visitedOut);
 }
 
-uint32_t Search::ShortestPath(Graph<HashNode>& graphOut, Graph<Node>& graphIn, uint32_t nodeA, uint32_t nodeB)
+uint32_t Search::ShortestPath(Graph<Node>& graphOut, Graph<Node>& graphIn, uint32_t nodeA, uint32_t nodeB)
 {
-	if(graphOut.hasNode(nodeA)==false || graphIn.hasNode(nodeB)==false) return -1;
+	if(graphOut.inBounds(nodeA)==false || graphIn.inBounds(nodeB)==false) return -1;
 	Search::init(graphIn.size, graphOut.size);
 
 	frontSearch.push(nodeA);

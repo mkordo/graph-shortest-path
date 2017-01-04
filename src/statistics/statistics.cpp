@@ -7,6 +7,7 @@ Statistics::Statistics() {
     sizeGraphIn = 0;
 
     duplicates = 0;
+    duplicatesQA = 0;
     insertions = 0;
     queries = 0;
 }
@@ -19,7 +20,7 @@ void Statistics::Start() {
 }
 
 void Statistics::CreatedGraphs() {
-	std::cout << "Created Graphs\n\n";
+	std::cout << "\nCreated Graphs\n\n";
 	created = clock();
 }
 
@@ -28,7 +29,11 @@ void Statistics::ExecutedQueries() {
 }
 
 void Statistics::Print() {
-	std::cout << "\n\nStatistics: \n\n";
+	std::cout << "\nStatistics: \n\n";
+
+  std::cout << "Duplicates in creation : " << duplicates << "\n";
+  std::cout << "Duplicates in queries : " << duplicatesQA << "\n\n";
+
 	std::cout << "Graph Creation : " << double(created - start) / CLOCKS_PER_SEC << " secs\n";
 
 	std::cout << "Query Execution : " << double(executed - created) / CLOCKS_PER_SEC << " secs\n";
