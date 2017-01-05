@@ -1,6 +1,6 @@
 #include <iostream>
 #include <stdlib.h>
-#include <cstdint>    /* For uint32_t */
+#include <string.h>
 
 #include "queue.h"
 
@@ -62,18 +62,34 @@ void Queue<T>::push(T element)
 }
 
 template <class T>
-void Queue<T>::expand()
+void Queue<T>::pushBlock(T* element, uint32_t elementSize)
+{
+  // Ensure that there is enough space for our copy
+  if(Queue<T>::spaceLeft() < elementSize)
+    Queue<T>::expand(elementSize);
+
+  memcpy(queue+next, element, elementSize*sizeof(T));
+  next += elementSize;
+}
+
+template <class T>
+void Queue<T>::expand(uint32_t minSize)
 {
   size *= 2;
+
+  while(minSize>=Queue<T>::spaceLeft()) {
+    size *= 2;
+  }
+
   queue = (T*) realloc(queue, sizeof(T) * size);
-  if(queue==NULL) { std::cerr << "Queue Constructor: Malloc" << std::endl; }
+  if(queue==NULL) { std::cerr << "Queue Constructor: Realloc" << std::endl; }
 }
 
 template <class T>
 T Queue<T>::pop()
 {
   if(Queue<T>::isEmpty())
-    return -1;
+    return UINT32_MAX;
   else {    
     front++;
     return queue[front-1];
@@ -86,15 +102,19 @@ int Queue<T>::count()
   return (next - front);
 }
 
+template <class T>
+uint32_t Queue<T>::spaceLeft()
+{
+  return (size - next);
+}
 
 template <class T>
 void Queue<T>::print()
 {
   if(Queue<T>::isEmpty())
-    std::cout<<"\nSorry the queue is empty!";
+    std::cout<<"Sorry the queue is empty!\n";
   else
   {
-    std::cout<<"\nQueue elements are : ";
     for(int i=front; i<next; i++)
     {
       std::cout << "\t" << queue[i];

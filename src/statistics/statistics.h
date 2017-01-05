@@ -36,6 +36,9 @@ class Statistics
     void finalSizes(uint32_t, uint32_t, uint32_t);
     void finalUsedSizes(uint32_t, uint32_t, uint32_t);
     void Print();
+    void Insertion();
+    void Query();
+    uint32_t getQueries();
 };
 
 #endif

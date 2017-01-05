@@ -7,11 +7,11 @@
 using namespace std;
 
 Search::Search() {
-	steps = 0;
+	stepsFront = 0;
+    stepsBack = 0;
 	size = 0;
 	visitedIn = NULL;
 	visitedOut = NULL;
-	found=false;
 }
 
 Search::~Search()
@@ -24,34 +24,39 @@ int Search::ShortestPath(Graph<Node>& graphOut, Graph<Node>& graphIn, uint32_t n
 {
 	if(graphOut.validNode(nodeA)==false || graphIn.validNode(nodeB)==false) return -1;
 	Search::init(graphIn.size, graphOut.size);
-
-	frontSearch.push(nodeA);
-	backSearch.push(nodeB);
+	bool found = false;
 
 	while(!frontSearch.isEmpty() && !backSearch.isEmpty())
 	{
 		if(frontSearch.count() < backSearch.count()) // Always search the smallest queue!
 		{
-			Search::bfsFront();
+			stepsFront++;
+			// found = Search::bfs
+			if(found==true) {
+				return stepsFront + stepsBack;
+			}
 		}
 		else
 		{
-			Search::bfsBack();
+			stepsBack++;
+			// found = Search::bfs
+			if(found==true) {
+				return stepsFront + stepsBack;
+			}
 		}
 
 	}
 
-	return steps;
+	return -1;
 }
 
-int Search::bfsFront()
+bool Search::bfs(Graph<Node>& myGraph, Queue<uint32_t>& myQueue, bool* myVisited, bool* theirVisited)
 {
-	frontSearch.pop();
-}
+	// We can get queue size with its count() method
 
-int Search::bfsBack()
-{
-	backSearch.pop();
+
+	// With Queue.pushBlock, we can push all neighbors into the Queue quicklier than simple push()
+	// myQueue.pushBlock(myGraph.getNodeNeighbor(current), myGraph.getNodeSize(current));
 }
 
 void Search::init(uint32_t sizeIn, uint32_t sizeOut)
@@ -59,8 +64,8 @@ void Search::init(uint32_t sizeIn, uint32_t sizeOut)
 	uint32_t max;
 
 	/* Initialize local variables */
-	steps = 0;
-	found=false;
+	stepsFront = 0;
+    stepsBack = 0;
 
 	/* Initialize visited array */
 	if(sizeIn>=sizeOut) max = sizeIn;
@@ -70,6 +75,7 @@ void Search::init(uint32_t sizeIn, uint32_t sizeOut)
 		size = max;
 		visitedIn = (bool*) realloc(visitedIn, sizeof(bool) * size);
 		visitedOut = (bool*) realloc(visitedOut, sizeof(bool) * size);
+		if(visitedIn==NULL) { cerr << "Search Init: Visited Realloc\n"; }
 	}
 
 	memset(visitedIn, false, sizeof(bool) * size);
@@ -77,5 +83,5 @@ void Search::init(uint32_t sizeIn, uint32_t sizeOut)
 
 	/* Initialize queues */
 	frontSearch.init();
-  backSearch.init();
+  	backSearch.init();
 }

@@ -5,6 +5,7 @@
 
 #include "graph/graph.h"
 #include "parser/parser.h"
+#include "parser/writer.h"
 #include "queue/queue.h"
 #include "search/search.h"
 #include "statistics/statistics.h"
@@ -74,13 +75,17 @@ void runQueries(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &gr
   int type;
   uint32_t me, neighbor;
   Parser reader(filename);
+  Writer output("results");
+
   Search search;
+  int result;
 
   while( ( type = reader.getQuery(me, neighbor) ) != STOP ) {
     //reader.printQuery(type, me, neighbor);
     if(type == QUESTION) {
-      //search.ShortestPath(graphDupl, graphIn, me, neighbor);
+      //stats.Query();
       search.ShortestPath(graphOut, graphIn, me, neighbor);
+      output.writeInt(result);
     }
     else if(type == INSERTION) {
       /*

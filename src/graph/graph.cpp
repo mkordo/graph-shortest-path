@@ -54,26 +54,8 @@ void Graph<T>::expand(uint32_t newNode)
   memset(buffer+size, 0, sizeof(T) * (newSize-size));
 
   size=newSize;
-  cout << "Expand Graph : New size " << size << "\n";
+  //cout << "Expand Graph : New size " << size << "\n";
 }
-
-template <class T>
-void Graph<T>::resize(uint32_t newSize)
-{
-  int i;
-  if(size >= newSize) {
-    cerr << "Graph Resize: Invalid new size\n";
-    return;
-  }
-  buffer = (T*) realloc(buffer, sizeof(T) * newSize);
-  if(buffer==NULL) { cerr << "Graph Resize: realloc" << endl; }
-
-  for(i=size; i<newSize; i++) new (buffer+i) T();
-
-  size=newSize;
-  cout << "Resize Graph : New size " << size << "\n";
-}
-
 
 template <class T>
 bool Graph<T>::validNode(uint32_t me)
@@ -98,6 +80,18 @@ bool Graph<T>::inBounds(uint32_t me)
 }
 
 template <class T>
+uint32_t* Graph<T>::getNodeNeighbor(uint32_t me)
+{
+  return buffer[me].neighbor;
+}
+
+template <class T>
+uint32_t Graph<T>::getNodeSize(uint32_t me)
+{
+  return buffer[me].getSize();
+}
+
+template <class T>
 void Graph<T>::print()
 {
   int i;
@@ -111,6 +105,31 @@ void Graph<T>::print()
   cout << "\n";
 }
 
+template <class T>
+void Graph<T>::printNode(uint32_t me)
+{
+  if(buffer[me].neighbor!=NULL)
+  {
+    buffer[me].print();
+  }
+}
+
+template <class T>
+void Graph<T>::resize(uint32_t newSize)
+{
+  int i;
+  if(size >= newSize) {
+    cerr << "Graph Resize: Invalid new size\n";
+    return;
+  }
+  buffer = (T*) realloc(buffer, sizeof(T) * newSize);
+  if(buffer==NULL) { cerr << "Graph Resize: realloc" << endl; }
+
+  for(i=size; i<newSize; i++) new (buffer+i) T();
+
+  size=newSize;
+  cout << "Resize Graph : New size " << size << "\n";
+}
 
 /* Inform the compiler about which types we are going to use the template */
 template class Graph<Node>;

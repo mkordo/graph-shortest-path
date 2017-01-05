@@ -28,18 +28,18 @@ Statistics::~Statistics() {}
 
 void Statistics::Start() {
   if(pleasePrint)
-	 cout << "Started Program\n\n";
-	start = clock();
+   cout << "Started Program...\n";
+  start = clock();
 }
 
 void Statistics::CreatedGraphs() {
-	created = clock();
+  created = clock();
   if(pleasePrint)
-	 cout << "\nCreated Graphs\n\nExecuting Queries...\n";
+   cout << "\nCreated Graphs\n\nExecuting Queries...\n";
 }
 
 void Statistics::ExecutedQueries() {
-	executed = clock();
+  executed = clock();
 }
 
 void Statistics::finalSizes(uint32_t out, uint32_t in, uint32_t dupl)
@@ -55,13 +55,28 @@ void Statistics::finalUsedSizes(uint32_t out, uint32_t in, uint32_t dupl)
   sizeGraphUsedDupl = dupl;
 }
 
+void Statistics::Insertion()
+{
+  insertions++;
+}
+
+void Statistics::Query()
+{
+  queries++;
+}
+
+uint32_t Statistics::getQueries()
+{
+  return queries;
+}
+
 void Statistics::Print() {
   if(pleasePrint) {
-  	cout << "\nStatistics: \n\n";
+    cout << "\nStatistics: \n\n";
 
     cout << "Duplicates in creation : " << duplicates << "\n";
     cout << "Duplicates in queries : " << duplicatesQA << "\n\n";
-    /*
+    //*
     cout << "Sise of graph used: Out: " << sizeGraphUsedOut << "\n";
     cout << "Sise of graph used: In: " << sizeGraphUsedIn << "\n";
     cout << "Sise of graph used: Dupl: " << sizeGraphUsedDupl << "\n\n";
@@ -70,8 +85,8 @@ void Statistics::Print() {
     cout << "Sise of graph: In: " << sizeGraphIn << "\n";
     cout << "Sise of graph: Dupl: " << sizeGraphDupl << "\n\n";
     //*/
-  	cout << "Graph Creation : " << double(created - start) / CLOCKS_PER_SEC << " secs\n";
-  	cout << "Query Execution : " << double(executed - created) / CLOCKS_PER_SEC << " secs\n";
-  	cout << "Total time : " << double(executed - start) / CLOCKS_PER_SEC << " secs\n\n";
+    cout << "Graph Creation : " << double(created - start) / CLOCKS_PER_SEC << " secs\n";
+    cout << "Query Execution : " << double(executed - created) / CLOCKS_PER_SEC << " secs\n";
+    cout << "Total time : " << double(executed - start) / CLOCKS_PER_SEC << " secs\n\n";
   }
 }

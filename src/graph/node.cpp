@@ -72,6 +72,10 @@ void Node::print()
   cout << endl;
 }
 
+uint32_t Node::getSize()
+{
+  return current;
+}
 
 
 void Node::expand()
