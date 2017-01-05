@@ -11,6 +11,7 @@ Search::Search() {
 	size = 0;
 	visitedIn = NULL;
 	visitedOut = NULL;
+	found=false;
 }
 
 Search::~Search()
@@ -19,7 +20,7 @@ Search::~Search()
 	if(visitedOut!=NULL) free(visitedOut);
 }
 
-uint32_t Search::ShortestPath(Graph<Node>& graphOut, Graph<Node>& graphIn, uint32_t nodeA, uint32_t nodeB)
+int Search::ShortestPath(Graph<Node>& graphOut, Graph<Node>& graphIn, uint32_t nodeA, uint32_t nodeB)
 {
 	if(graphOut.validNode(nodeA)==false || graphIn.validNode(nodeB)==false) return -1;
 	Search::init(graphIn.size, graphOut.size);
@@ -29,13 +30,29 @@ uint32_t Search::ShortestPath(Graph<Node>& graphOut, Graph<Node>& graphIn, uint3
 
 	while(!frontSearch.isEmpty() && !backSearch.isEmpty())
 	{
-		frontSearch.pop();
-		backSearch.pop();
+		if(frontSearch.count() < backSearch.count()) // Always search the smallest queue!
+		{
+			Search::bfsFront();
+		}
+		else
+		{
+			Search::bfsBack();
+		}
+
 	}
 
 	return steps;
 }
 
+int Search::bfsFront()
+{
+	frontSearch.pop();
+}
+
+int Search::bfsBack()
+{
+	backSearch.pop();
+}
 
 void Search::init(uint32_t sizeIn, uint32_t sizeOut)
 {
@@ -43,6 +60,7 @@ void Search::init(uint32_t sizeIn, uint32_t sizeOut)
 
 	/* Initialize local variables */
 	steps = 0;
+	found=false;
 
 	/* Initialize visited array */
 	if(sizeIn>=sizeOut) max = sizeIn;

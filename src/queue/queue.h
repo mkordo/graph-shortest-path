@@ -14,7 +14,7 @@ class Queue
   	Queue(int size_ = 100);
   	~Queue();
 
-  	void init();
+  void init();
 	bool isEmpty();
 	bool isFull();
 	void push(T);

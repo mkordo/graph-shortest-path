@@ -8,10 +8,11 @@
 class Search
 {
   public:
-    uint32_t steps;
+    int steps;
     uint32_t size;
     bool *visitedIn;
     bool *visitedOut;
+    bool found;
 
     Queue<uint32_t> frontSearch;
     Queue<uint32_t> backSearch;
@@ -19,11 +20,13 @@ class Search
     Search();
     ~Search();
 
-    uint32_t ShortestPath(Graph<Node>&, Graph<Node>&, uint32_t, uint32_t);
+    int ShortestPath(Graph<Node>&, Graph<Node>&, uint32_t, uint32_t);
 
   private:
     void init(uint32_t, uint32_t);
-    uint32_t bfs();
+
+    int bfsFront();
+    int bfsBack();
 };
 
 #endif
