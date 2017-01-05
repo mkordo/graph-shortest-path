@@ -84,7 +84,7 @@ void runQueries(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &gr
     //reader.printQuery(type, me, neighbor);
     if(type == QUESTION) {
       //stats.Query();
-      search.ShortestPath(graphOut, graphIn, me, neighbor);
+      result = search.ShortestPath(graphOut, graphIn, me, neighbor);
       output.writeInt(result);
     }
     else if(type == INSERTION) {
