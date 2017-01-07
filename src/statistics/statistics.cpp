@@ -74,6 +74,9 @@ void Statistics::Print() {
   if(pleasePrint) {
     cout << "\nStatistics: \n\n";
 
+    if(queries) cout << "Queries : " << queries << "\n";
+    if(insertions) cout << "Insertions : " << insertions << "\n\n";
+
     cout << "Duplicates in creation : " << duplicates << "\n";
     cout << "Duplicates in queries : " << duplicatesQA << "\n\n";
     //*

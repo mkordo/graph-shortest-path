@@ -22,7 +22,7 @@ class Queue
 	uint32_t spaceLeft();
 	void push(T);
 	void pushBlock(T*, uint32_t);
-	T pop();
+	bool pop(T&);
 	void print();
 	void expand(uint32_t minSize = 1);
 	int count();
