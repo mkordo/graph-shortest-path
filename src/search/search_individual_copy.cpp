@@ -27,21 +27,21 @@ int Search::ShortestPath(Graph<Node>& graphOut, Graph<Node>& graphIn, uint32_t n
 	if(graphOut.validNode(nodeA)==false || graphIn.validNode(nodeB)==false) return -1;
 	Search::init(graphIn.size, graphOut.size);
 	bool found = false;
-//cout << "Searching from "<<nodeA<<" to "<<nodeB<<endl;
-	/*v2
+	//cout << "Searching from "<<nodeA<<" to "<<nodeB<<endl;
+	
 	frontSearch.push(nodeA);
 	visitedOut[nodeA]=true;
 	backSearch.push(nodeB);
 	visitedIn[nodeB]=true;
-	*/
-	size=graphOut.getNodeSize(nodeA);
+	
+	/*size=graphOut.getNodeSize(nodeA);
 	neigb=graphOut.getNodeNeighbor(nodeA);
 	frontSearch.pushBlock(neigb,size);
 	//frontSearch.print();
 	//------------------------------------
 	size=graphIn.getNodeSize(nodeB);
 	neigb=graphIn.getNodeNeighbor(nodeB);
-	backSearch.pushBlock(neigb,size);
+	backSearch.pushBlock(neigb,size);*/
 	//backSearch.print();
 	//for(i=0;i<size;i++){cout<<neigb[i];}
 	while(!frontSearch.isEmpty() && !backSearch.isEmpty())
@@ -86,22 +86,21 @@ bool Search::bfs(Graph<Node>& myGraph, Queue<uint32_t>& myQueue, bool* myVisited
 	for(i=0;i<max;i++){
 		//myQueue.pushBlock
 		head=myQueue.pop();
-		if(myVisited[head]==false){
+		//if(myVisited[head]==false){
 			//cout<< "banana!"<<endl;
-			myVisited[head]=true;
+			//myVisited[head]=true;
 			size=myGraph.getNodeSize(head);
 			neigb=myGraph.getNodeNeighbor(head);
-			myQueue.pushBlock(neigb,size);
 			//------------------------------------------------------------v2
-			//for(j=0;j<size;j++){
+			for(j=0;j<size;j++){
 				//cout<<neigb[j]<<" ";
 				//cout<<myVisited[neigb[j]]<<"+"<<theirVisited[j];
-				//if(myVisited[neigb[j]]==false){myVisited[neigb[j]]=true; myQueue.push(neigb[j]);}
-				//if (theirVisited[neigb[j]]==true) return true;
-			//}//cout<<endl;
+				if(myVisited[neigb[j]]==false){myVisited[neigb[j]]=true; myQueue.push(neigb[j]);}
+				if (theirVisited[neigb[j]]==true) return true;
+			}//cout<<endl;
 			//------------------------------------------------------------
-			
-		}
+			//myQueue.pushBlock(neigb,size);
+		//}
 		if(theirVisited[head]==true) return true;
 	}
 
