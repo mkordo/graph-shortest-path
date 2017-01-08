@@ -7,7 +7,7 @@ template <class T>
 class Queue
 {
   private:
-	int front, next;
+	uint32_t front, next;
 	T *queue;
 	int size;
 
@@ -26,7 +26,7 @@ class Queue
 	T pop();
 	void print();
 	void expand(uint32_t minSize = 1);
-	int count();
+	uint32_t count();
 };
 
 #endif

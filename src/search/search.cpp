@@ -24,45 +24,28 @@ Search::~Search()
 int Search::ShortestPath(Graph<Node>& graphOut, Graph<Node>& graphIn, uint32_t nodeA, uint32_t nodeB)
 {
 	if(graphOut.validNode(nodeA)==false || graphIn.validNode(nodeB)==false) return -1;
-	//if(nodeA == nodeB) return 0;
+	if(nodeA == nodeB) return 0;
+
 	Search::init(graphIn.size, graphOut.size);
+	bool found = false;
 
-	uint32_t *neigb, size, i;
-
-	//cout << "Searching from " << nodeA << " to " << nodeB << endl;
-
-	/*v2
 	frontSearch.push(nodeA);
 	visitedOut[nodeA]=true;
+
 	backSearch.push(nodeB);
 	visitedIn[nodeB]=true;
-	*/
 
-	visitedOut[nodeA]=true;
-	visitedIn[nodeB]=true;
-
-	size=graphOut.getNodeSize(nodeA);
-	neigb=graphOut.getNodeNeighbor(nodeA);
-	frontSearch.pushBlock(neigb,size);
-	//frontSearch.print();
-
-	size=graphIn.getNodeSize(nodeB);
-	neigb=graphIn.getNodeNeighbor(nodeB);
-	backSearch.pushBlock(neigb,size);
-	//backSearch.print();
-
-	//for(i=0; i<size; i++) { cout << neigb[i]; }
 	while(!frontSearch.isEmpty() && !backSearch.isEmpty())
 	{
-		/*if(frontSearch.count() < backSearch.count()) // Always search the smallest queue!*/
-
-		//cout<<"frontSearch: ";frontSearch.print();
-		steps++;
-		if ( Search::bfs(graphOut, frontSearch, visitedOut, visitedIn) == true ) return steps; //found a solution 
-
-		//cout<<"backSearch: ";backSearch.print();
-		steps++;
-		if ( Search::bfs(graphIn, backSearch, visitedIn, visitedOut) == true ) return steps;   //found a solution
+		//if(frontSearch.count() < backSearch.count()) { // Always search the smallest queue!
+			steps++;
+			if ( Search::bfs(graphOut, frontSearch, visitedOut, visitedIn) == true ) return steps; //found a solution 
+		//}
+		//else {
+			steps++;
+			if ( Search::bfs(graphIn, backSearch, visitedIn, visitedOut) == true ) return steps;   //found a solution
+		//}
+		//break;
 	}
 
 	return -1;
@@ -71,26 +54,23 @@ int Search::ShortestPath(Graph<Node>& graphOut, Graph<Node>& graphIn, uint32_t n
 bool Search::bfs(Graph<Node>& myGraph, Queue<uint32_t>& myQueue, bool* myVisited, bool* theirVisited)
 {
 	uint32_t max, i, head, *neigb, size, j;
-	//cout << myQueue.count() <<endl;
 
-	// Search only one level at a time
-	max = myQueue.count();
-	for(i=0; i<max; i++){
-		head = myQueue.pop();
-		if(myVisited[head]==false){
-			myVisited[head] = true;
-			size = myGraph.getNodeSize(head);
-			neigb = myGraph.getNodeNeighbor(head);
-			myQueue.pushBlock(neigb, size);
-			//------------------------------------------------------------v2
-			//for(j=0;j<size;j++){
-				//cout<<neigb[j]<<" ";
-				//cout<<myVisited[neigb[j]]<<"+"<<theirVisited[j];
-				//if(myVisited[neigb[j]]==false){myVisited[neigb[j]]=true; myQueue.push(neigb[j]);}
-				//if (theirVisited[neigb[j]]==true) return true;
-			//}//cout<<endl;
-			//------------------------------------------------------------			
+	max=myQueue.count();
+	for(i=0;i<max;i++){
+
+		head=myQueue.pop();
+
+		size=myGraph.getNodeSize(head);
+		neigb=myGraph.getNodeNeighbor(head);
+
+		for(j=0;j<size;j++){
+			if(myVisited[neigb[j]]==false) {
+				myVisited[neigb[j]]=true;
+				myQueue.push(neigb[j]); 
+			}
+			if (theirVisited[neigb[j]]==true) return true;
 		}
+			
 		if(theirVisited[head]==true) return true;
 	}
 	return false;
