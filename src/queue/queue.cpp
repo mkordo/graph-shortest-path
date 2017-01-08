@@ -97,7 +97,7 @@ T Queue<T>::pop()
 }
 
 template <class T>
-int Queue<T>::count()
+uint32_t Queue<T>::count()
 {
   return (next - front);
 }

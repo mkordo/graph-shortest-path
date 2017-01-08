@@ -75,7 +75,7 @@ void runQueries(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &gr
   int type;
   uint32_t me, neighbor;
   Parser reader(filename);
-  Writer output("results");
+  Writer output("results.txt");
 
   Search search;
   int result;
@@ -86,6 +86,7 @@ void runQueries(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &gr
       //stats.Query();
       result = search.ShortestPath(graphOut, graphIn, me, neighbor);
       output.writeInt(result);
+      //break;
     }
     else if(type == INSERTION) {
       /*
