@@ -8,8 +8,9 @@
 class Search
 {
   public:
-    int stepsFront;
-    int stepsBack;
+    //int stepsFront;
+    //int stepsBack;
+    uint32_t steps;
     uint32_t size;
     bool *visitedIn;
     bool *visitedOut;
