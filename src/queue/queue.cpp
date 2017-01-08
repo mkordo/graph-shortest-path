@@ -98,6 +98,14 @@ bool Queue<T>::pop(T& popped)
   }
 }
 
+// Must not be used unless we are sure that the queue is not empty
+template <class T>
+T Queue<T>::pop()
+{
+  front++;    
+  return queue[front-1];
+}
+
 template <class T>
 int Queue<T>::count()
 {
