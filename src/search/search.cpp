@@ -7,8 +7,6 @@
 using namespace std;
 
 Search::Search() {
-	//stepsFront = 0;
-    //stepsBack = 0;
 	steps=0;
 	size = 0;
 	visitedIn = NULL;
@@ -23,8 +21,10 @@ Search::~Search()
 
 int Search::ShortestPath(Graph<Node>& graphOut, Graph<Node>& graphIn, uint32_t nodeA, uint32_t nodeB)
 {
-	if(graphOut.validNode(nodeA)==false || graphIn.validNode(nodeB)==false) return -1;
+	if(graphOut.inBounds(nodeA)==false || graphIn.inBounds(nodeB)==false) return -1;
 	if(nodeA == nodeB) return 0;
+	if(graphOut.getNodeSize(nodeA)==false || graphIn.getNodeSize(nodeB)==false)	return -1;
+	//if(graphOut.validNode(nodeA)==false || graphIn.validNode(nodeB)==false)	return -1;
 
 	Search::init(graphIn.size, graphOut.size);
 	bool found = false;
@@ -37,14 +37,14 @@ int Search::ShortestPath(Graph<Node>& graphOut, Graph<Node>& graphIn, uint32_t n
 
 	while(!frontSearch.isEmpty() && !backSearch.isEmpty())
 	{
-		//if(frontSearch.count() < backSearch.count()) { // Always search the smallest queue!
+		if(frontSearch.count() < backSearch.count()) { // Always search the smallest queue!
 			steps++;
 			if ( Search::bfs(graphOut, frontSearch, visitedOut, visitedIn) == true ) return steps; //found a solution 
-		//}
-		//else {
+		}
+		else {
 			steps++;
 			if ( Search::bfs(graphIn, backSearch, visitedIn, visitedOut) == true ) return steps;   //found a solution
-		//}
+		}
 		//break;
 	}
 
@@ -56,7 +56,7 @@ bool Search::bfs(Graph<Node>& myGraph, Queue<uint32_t>& myQueue, bool* myVisited
 	uint32_t max, i, head, *neigb, size, j;
 
 	max=myQueue.count();
-	for(i=0;i<max;i++){
+	for(i=0; i<max; i++){
 
 		head=myQueue.pop();
 
@@ -81,8 +81,6 @@ void Search::init(uint32_t sizeIn, uint32_t sizeOut)
 	uint32_t max;
 
 	/* Initialize local variables */
-	//stepsFront = 0;
-    //stepsBack = 0;
 	steps=0;
 	/* Initialize visited array */
 	if(sizeIn>=sizeOut) max = sizeIn;

@@ -55,18 +55,11 @@ void createGraph(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &g
 
   while( reader.getRow(me, neighbor) != STOP )
   {
-    //reader.printRow(me, neighbor);
-    //*
-    //graphOut.insert(me, neighbor);
-    //graphIn.insert(neighbor, me);
-    //*/
-    //*
     if( graphDupl.insert(me, neighbor) == true ) {
       graphOut.insert(me, neighbor);
       graphIn.insert(neighbor, me);
     }
     else stats.duplicates++;
-    //*/
   }
   //cout << "\n" << reader.getCount() << "\n";
 }
@@ -101,48 +94,6 @@ void runQueries(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &gr
   }
   //cout << "\n" << reader.getCount() << "\n";
 }
-
-
-
-
-void runQueries2(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &graphDupl, string filename)
-{
-  int type;
-  uint32_t me, neighbor;
-  Parser reader(filename);
-  Writer output("results");
-
-  Search search;
-  int result;
-
-  while( ( type = reader.getQuery(me, neighbor) ) != STOP ) {
-    //reader.printQuery(type, me, neighbor);
-    if(type == QUESTION) {
-      stats.Query();
-      //result = search.ShortestPath(graphOut, graphIn, me, neighbor);
-      //output.writeInt(result);
-    }
-    else if(type == INSERTION) {
-      stats.Insertion();
-      //*
-      //graphOut.insert(me, neighbor);
-      //graphIn.insert(neighbor, me);
-      //*/
-      //*
-      if( graphDupl.insert(me, neighbor) == true ) {
-        graphOut.insert(me, neighbor);
-        graphIn.insert(neighbor, me);
-      }
-      else stats.duplicatesQA++;
-      //*/
-
-    }
-  }
-  //cout << "\n" << reader.getCount() << "\n";
-}
-
-
-
 
 
 
