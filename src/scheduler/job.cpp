@@ -11,6 +11,13 @@ Job::~Job()
   
 }
 
+int Job::execute()
+{
+	return 0;
+}
+
+
+
 std::ostream &operator<<(std::ostream &os, Job const &m) { 
-    return os << m.la;
+    return os << "Job Print";
 }

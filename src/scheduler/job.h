@@ -7,10 +7,12 @@
 class Job
 {
   public:
-    int la;
+    int result;
     
     Job();
     ~Job();
+
+    int execute();
 
 };
 

@@ -136,5 +136,6 @@ void Queue<T>::print()
 
 /* Inform the compiler about which types we are going to use the template */
 template class Queue<uint32_t>;
+template class Queue<int>;
 template class Queue<Job>;
 

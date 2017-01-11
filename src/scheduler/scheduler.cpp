@@ -22,4 +22,4 @@ Scheduler<T>::~Scheduler()
 
 
 /* Inform the compiler about which types we are going to use the template */
-template class Scheduler<Job>;
+template class Scheduler<int>;

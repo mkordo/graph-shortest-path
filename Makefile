@@ -1,11 +1,12 @@
-OBJ = bin/main.o bin/graph.o bin/node.o bin/parser.o bin/writer.o bin/hash.o bin/queue.o bin/search.o bin/statistics.o bin/scheduler.o bin/job.o
+OBJ = bin/main.o bin/graph.o bin/node.o bin/parser.o bin/writer.o bin/hash.o bin/queue.o bin/search.o bin/statistics.o bin/scheduler.o bin/threadPool.o bin/job.o
 EXE = bin/shortest-path
 DIR = bin
+LIBS = -lpthread
 
 all: clearscreen create_dir $(EXE)
 
 $(EXE): $(OBJ)
-	g++ -Wall -o $(EXE) $(OBJ)
+	g++ -Wall -o $(EXE) $(OBJ) $(LIBS)
 
 bin/%.o: src/%.cpp
 	g++ -c -std=c++11 $< -o $@

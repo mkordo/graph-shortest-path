@@ -24,7 +24,6 @@ int Search::ShortestPath(Graph<Node>& graphOut, Graph<Node>& graphIn, uint32_t n
 	if(graphOut.inBounds(nodeA)==false || graphIn.inBounds(nodeB)==false) return -1;
 	if(nodeA == nodeB) return 0;
 	if(graphOut.getNodeSize(nodeA)==false || graphIn.getNodeSize(nodeB)==false)	return -1;
-	//if(graphOut.validNode(nodeA)==false || graphIn.validNode(nodeB)==false)	return -1;
 
 	Search::init(graphIn.size, graphOut.size);
 	bool found = false;
