@@ -65,6 +65,35 @@ void createGraph(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &g
 }
 
 
+void runQueries2(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &graphDupl, string filename)
+{
+  Scheduler taskManager;
+  Job newJob;
+  Parser reader(filename);
+  Writer output("results.txt");
+
+  Search search;
+  int result;
+
+  while( ( newJob.type = reader.getQuery(newJob.me, newJob.neighbor) ) != STOP ) {
+    //reader.printQuery(type, me, neighbor);
+    if(newJob.type == QUESTION) {
+      stats.Query();
+      taskManager.Assign(newJob);
+    }
+    else if(newJob.type == INSERTION) {
+      stats.Insertion();
+      if( graphDupl.insert(newJob.me, newJob.neighbor) == true ) {
+        graphOut.insert(newJob.me, newJob.neighbor);
+        graphIn.insert(newJob.neighbor, newJob.me);
+      }
+      else stats.duplicatesQA++;
+    }
+  }
+  //cout << "\n" << reader.getCount() << "\n";
+}
+
+
 void runQueries(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &graphDupl, string filename)
 {
   int type;

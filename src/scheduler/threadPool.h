@@ -7,14 +7,13 @@
 class ThreadPool
 {
   public:
-  	int max;
     int workers;
     pthread_t *pool;
 
-    ThreadPool(int max_ = 2);
+    ThreadPool(void *, int workers_ = 2);
     ~ThreadPool();
 };
 
-void* jobExecute(void *);
+
 
 #endif
