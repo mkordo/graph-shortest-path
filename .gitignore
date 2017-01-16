@@ -3,5 +3,5 @@ datasets/large
 datasets/large2
 bin
 test/bin
-results
+results.txt
 exercise

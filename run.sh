@@ -1,4 +1,4 @@
-rm -f results
+rm -f results.txt
 clear
 
 #./bin/shortest-path -f datasets/tiny/tinyGraph.txt -q datasets/tiny/tinyWorkload_FINAL.txt && diff "./results.txt" "./datasets/tiny/tinyWorkload_RESULTS.txt"
