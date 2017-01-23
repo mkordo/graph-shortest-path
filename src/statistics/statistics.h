@@ -26,6 +26,7 @@ class Statistics
     uint32_t duplicatesQA;
     uint32_t insertions;
     uint32_t queries;
+    uint32_t gusts;
 
     Statistics(bool pleasePrint_ = true);
     ~Statistics();
@@ -38,6 +39,7 @@ class Statistics
     void Print();
     void Insertion();
     void Query();
+    void Gust();
     uint32_t getQueries();
 };
 

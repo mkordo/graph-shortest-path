@@ -5,30 +5,20 @@
 #include <string>
 #include "../queue/queue.h"
 #include "../graph/graph.h"
+#include "../parser/writer.h"
 #include "../parser/parser.h"
+#include "job.h"
 #include "threadPool.h"
-
-class JobTools
-{
-  public:
-    Queue<Job> jobQueue;
-    Queue<int> results;
-    pthread_mutex_t jobQueueMutex;
-    pthread_mutex_t resultsMutex;
-
-    JobTools();
-    ~JobTools();
-
-    void print();
-};
 
 class Scheduler
 {
   public:
   	ThreadPool *pool;
   	JobTools *info;
+    int workers;
+    int workersTmp;
 
-    Scheduler();
+    Scheduler(Graph<Node> *graphOut, Graph<Node> *graphIn, int workers_ = 2);
     ~Scheduler();
 
     void Assign(Job);

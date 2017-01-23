@@ -5,18 +5,19 @@
 
 using namespace std;
 
-ThreadPool::ThreadPool(void *arg, int workers_)
+ThreadPool::ThreadPool(void *arg_, int workers_)
 {
 	int i, errnum;
+	JobTools *arg = (JobTools *) arg_;
 
 	workers = workers_;
 	pool = (pthread_t *) malloc(workers * sizeof(pthread_t));
 	if(pool == NULL) std::cerr << "Thread Pool Constructor : Malloc Error\n" ;
 
 	for(i=0; i<workers; i++) {
-		errnum = pthread_create(&pool[i], NULL, jobExecute, arg);
+		errnum = pthread_create(&pool[i], NULL, jobExecute, (void*) (arg + i));
 		if(errnum) { std::cerr << "Thread Pool Constructor : pthread_create error : " << errnum << "\n"; }
-		cout << "Created thread with id: " << pool[i] << "\n";
+		//cout << "Created thread with id: " << pool[i] << "\n";
 	}
 }
 
@@ -26,7 +27,7 @@ ThreadPool::~ThreadPool()
 	void *exitStatus;
 
 	for(i=0; i<workers; i++) {
-		cout << "Destroying thread with id: " << pool[i] << "\n";
+		//cout << "Destroying thread with id: " << pool[i] << "\n";
 		errnum = pthread_join(pool[i], &exitStatus);
 		if(errnum) {
 			std::cerr << "Thread Pool Destructor : In thread : " << pool[i] << " : Exit status : " << exitStatus << "\n";

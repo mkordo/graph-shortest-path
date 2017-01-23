@@ -42,3 +42,48 @@ std::ostream &operator<<(std::ostream &os, Job const &theJob) {
 
     return os << out << theJob.me << " " << theJob.neighbor << "\n";
 }
+
+////////////////
+
+JobTools::JobTools()
+{
+	jobQueueMutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
+	resultsMutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
+	
+	pthread_mutex_init(jobQueueMutex, NULL);
+	pthread_mutex_init(resultsMutex, NULL);
+
+	jobQueue = new Queue<Job>;
+    results = new Queue<int>;
+}
+
+JobTools::~JobTools()
+{
+	pthread_mutex_destroy(jobQueueMutex);
+	pthread_mutex_destroy(resultsMutex);
+
+	free(jobQueueMutex);
+	free(resultsMutex);
+
+	delete jobQueue;
+	delete results;
+
+	delete search;
+}
+
+void JobTools::print()
+{
+	cout << "Printing mutexes: " << jobQueueMutex << endl;
+}
+
+void JobTools::SearchInit(Graph<Node> *graphOut, Graph<Node> *graphIn)
+{
+	search = new Search(graphOut, graphIn);
+}
+
+void JobTools::Assign(Job newJob)
+{
+	pthread_mutex_lock(jobQueueMutex);
+	jobQueue->push(newJob);
+	pthread_mutex_unlock(jobQueueMutex);
+}

@@ -14,6 +14,7 @@ Statistics::Statistics(bool pleasePrint_) {
     duplicatesQA = 0;
     insertions = 0;
     queries = 0;
+    gusts = 0;
 
     sizeGraphOut = 0;
     sizeGraphIn = 0;
@@ -65,6 +66,11 @@ void Statistics::Query()
   queries++;
 }
 
+void Statistics::Gust()
+{
+  gusts++;
+}
+
 uint32_t Statistics::getQueries()
 {
   return queries;
@@ -74,8 +80,9 @@ void Statistics::Print() {
   if(pleasePrint) {
     cout << "\nStatistics: \n\n";
 
-    if(queries) cout << "Queries : " << queries << "\n";
-    if(insertions) cout << "Insertions : " << insertions << "\n\n";
+    cout << "Queries : " << queries << "\n";
+    cout << "Insertions : " << insertions << "\n";
+    cout << "Gusts : " << gusts << "\n\n";
 
     cout << "Duplicates in creation : " << duplicates << "\n";
     cout << "Duplicates in queries : " << duplicatesQA << "\n\n";

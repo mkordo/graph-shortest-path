@@ -14,8 +14,8 @@
 using namespace std;
 
 int cmd(int, char**, string&, string&);
-void createGraph(Graph<Node>&, Graph<Node>&, Graph<HashNode>&, string);
-void runQueries(Graph<Node>&, Graph<Node>&, Graph<HashNode>&, string);
+void createGraph(Graph<Node>*, Graph<Node>*, Graph<HashNode>*, string);
+void runQueries(Graph<Node>*, Graph<Node>*, Graph<HashNode>*, string);
 
 Statistics stats(true);
 //Statistics stats(false);
@@ -33,13 +33,13 @@ int main(int argc, char** argv)
   Graph<Node> graphIn;
   Graph<HashNode> graphDupl;
 
-  createGraph(graphOut, graphIn, graphDupl, filename);
+  createGraph(&graphOut, &graphIn, &graphDupl, filename);
   //graphDupl.print();
   //graphOut.print();
   //graphIn.print();
   stats.CreatedGraphs();
 
-  runQueries(graphOut, graphIn, graphDupl, filenameQA);
+  runQueries(&graphOut, &graphIn, &graphDupl, filenameQA);
   stats.ExecutedQueries();
 
   stats.finalSizes(graphOut.size, graphIn.size, graphDupl.size);
@@ -48,16 +48,16 @@ int main(int argc, char** argv)
   return 0;
 }
 
-void createGraph(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &graphDupl, string filename)
+void createGraph(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *graphDupl, string filename)
 {
   uint32_t me, neighbor;
   Parser reader(filename);
 
   while( reader.getRow(me, neighbor) != STOP )
   {
-    if( graphDupl.insert(me, neighbor) == true ) {
-      graphOut.insert(me, neighbor);
-      graphIn.insert(neighbor, me);
+    if( graphDupl->insert(me, neighbor) == true ) {
+      graphOut->insert(me, neighbor);
+      graphIn->insert(neighbor, me);
     }
     else stats.duplicates++;
   }
@@ -65,15 +65,12 @@ void createGraph(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &g
 }
 
 
-void runQueries2(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &graphDupl, string filename)
+void runQueries2(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *graphDupl, string filename)
 {
-  Scheduler taskManager;
+  Scheduler taskManager(graphOut, graphIn, 2);
   Job newJob;
   Parser reader(filename);
   Writer output("results.txt");
-
-  Search search;
-  int result;
 
   while( ( newJob.type = reader.getQuery(newJob.me, newJob.neighbor) ) != STOP ) {
     //reader.printQuery(type, me, neighbor);
@@ -83,40 +80,43 @@ void runQueries2(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &g
     }
     else if(newJob.type == INSERTION) {
       stats.Insertion();
-      if( graphDupl.insert(newJob.me, newJob.neighbor) == true ) {
-        graphOut.insert(newJob.me, newJob.neighbor);
-        graphIn.insert(newJob.neighbor, newJob.me);
+      if( graphDupl->insert(newJob.me, newJob.neighbor) == true ) {
+        graphOut->insert(newJob.me, newJob.neighbor);
+        graphIn->insert(newJob.neighbor, newJob.me);
       }
       else stats.duplicatesQA++;
     }
+    else if(newJob.type == GUST) {
+      stats.Gust();
+    }
   }
+
   //cout << "\n" << reader.getCount() << "\n";
 }
 
 
-void runQueries(Graph<Node> &graphOut, Graph<Node> &graphIn, Graph<HashNode> &graphDupl, string filename)
+void runQueries(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *graphDupl, string filename)
 {
   int type;
   uint32_t me, neighbor;
   Parser reader(filename);
   Writer output("results.txt");
 
-  Search search;
+  Search search(graphOut, graphIn);
   int result;
 
   while( ( type = reader.getQuery(me, neighbor) ) != STOP ) {
     //reader.printQuery(type, me, neighbor);
     if(type == QUESTION) {
       stats.Query();
-      result = search.ShortestPath(graphOut, graphIn, me, neighbor);
+      result = search.ShortestPath(me, neighbor);
       output.writeInt(result);
-      //break;
     }
     else if(type == INSERTION) {
       stats.Insertion();
-      if( graphDupl.insert(me, neighbor) == true ) {
-        graphOut.insert(me, neighbor);
-        graphIn.insert(neighbor, me);
+      if( graphDupl->insert(me, neighbor) == true ) {
+        graphOut->insert(me, neighbor);
+        graphIn->insert(neighbor, me);
       }
       else stats.duplicatesQA++;
     }

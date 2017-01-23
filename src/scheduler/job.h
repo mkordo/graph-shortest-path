@@ -3,7 +3,11 @@
 
 #include <cstdint>    /* For uint32_t */
 #include <iostream>
+#include <pthread.h>
 #include "../parser/parser.h"
+#include "../queue/queue.h"
+#include "../graph/graph.h"
+#include "../search/search.h"
 
 class Job
 {
@@ -22,5 +26,22 @@ class Job
 };
 
 std::ostream &operator<<(std::ostream &, Job const &);
+
+class JobTools
+{
+  public:
+    Queue<Job> *jobQueue;
+    Queue<int> *results;
+    Search *search;
+    pthread_mutex_t *jobQueueMutex;
+    pthread_mutex_t *resultsMutex;
+
+    JobTools();
+    ~JobTools();
+
+    void SearchInit(Graph<Node> *graphOut, Graph<Node> *graphIn);
+    void Assign(Job);
+    void print();
+};
 
 #endif

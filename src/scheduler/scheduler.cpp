@@ -1,48 +1,38 @@
 #include <iostream>
 #include <stdlib.h>
 
-#include "job.h"
 #include "scheduler.h"
 
 using namespace std;
 
-Scheduler::Scheduler()
+Scheduler::Scheduler(Graph<Node> *graphOut, Graph<Node> *graphIn, int workers_)
 {
-	info = new JobTools;
-	pool = new ThreadPool (info);
+	int i;
+	workers = workers_;
+    workersTmp = 0;
+
+	info = new JobTools [workers];
+	for(i=0; i<workers; i++) 
+		info[i].SearchInit(graphOut, graphIn);
+
+	//pthread_mutex_lock(info->jobQueueMutex);	// Ensure that no thread will read from Queue before master is ready
+	pool = new ThreadPool ((void*) info, workers);
 }
 
 Scheduler::~Scheduler()
 {
 	//info->jobQueue.print();
-	cout << "Job queue size: " << info->jobQueue.count() << "\n";
+	cout << "Job queue size: " << info->jobQueue->count() << "\n";
 	delete pool;
-	delete info;
+	delete [] info;
 }
 
 void Scheduler::Assign(Job newJob)
 {
-	//cout << "Wtf? ";
-	info->jobQueue.push(newJob);
+	info[0].Assign(newJob);
 }
 
-////////////////
 
-JobTools::JobTools()
-{
-	jobQueueMutex = PTHREAD_MUTEX_INITIALIZER;
-    resultsMutex = PTHREAD_MUTEX_INITIALIZER;
-}
-
-JobTools::~JobTools()
-{
-
-}
-
-void JobTools::print()
-{
-
-}
 
 
 
@@ -53,6 +43,7 @@ void* jobExecute(void* info_)
 {
 	JobTools *info = (JobTools *) info_;
 
+	info[0].print();
 
 
 
