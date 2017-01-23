@@ -54,7 +54,7 @@ JobTools::JobTools()
 	pthread_mutex_init(resultsMutex, NULL);
 
 	jobQueue = new Queue<Job>;
-    results = new Queue<int>;
+    //results = new Queue<int>;
 }
 
 JobTools::~JobTools()
@@ -66,7 +66,7 @@ JobTools::~JobTools()
 	free(resultsMutex);
 
 	delete jobQueue;
-	delete results;
+	//delete results;
 
 	delete search;
 }
@@ -81,9 +81,24 @@ void JobTools::SearchInit(Graph<Node> *graphOut, Graph<Node> *graphIn)
 	search = new Search(graphOut, graphIn);
 }
 
+void JobTools::ResultsInit(Queue<int> *results_)
+{
+	results = results_;
+}
+
 void JobTools::Assign(Job newJob)
 {
-	pthread_mutex_lock(jobQueueMutex);
+	//pthread_mutex_lock(jobQueueMutex);
 	jobQueue->push(newJob);
+	//pthread_mutex_unlock(jobQueueMutex);
+}
+
+void JobTools::LockQueue()
+{
+	pthread_mutex_lock(jobQueueMutex);
+}
+
+void JobTools::UnlockQueue()
+{
 	pthread_mutex_unlock(jobQueueMutex);
 }

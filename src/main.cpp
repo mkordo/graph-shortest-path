@@ -88,7 +88,10 @@ void runQueries2(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *g
     }
     else if(newJob.type == GUST) {
       stats.Gust();
-    }
+      //taskManager.UnlockAll();
+      taskManager.Init();
+      //taskManager.LockAll();
+    }    
   }
 
   //cout << "\n" << reader.getCount() << "\n";

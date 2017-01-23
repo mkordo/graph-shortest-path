@@ -15,13 +15,19 @@ class Scheduler
   public:
   	ThreadPool *pool;
   	JobTools *info;
+    Queue<int> *results;
     int workers;
     int workersTmp;
+    uint32_t id;
 
     Scheduler(Graph<Node> *graphOut, Graph<Node> *graphIn, int workers_ = 2);
     ~Scheduler();
 
     void Assign(Job);
+    void Execute();
+    void Init();
+    void LockAll();
+    void UnlockAll();
 };
 
 void* jobExecute(void *);

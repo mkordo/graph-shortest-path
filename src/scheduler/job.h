@@ -40,7 +40,10 @@ class JobTools
     ~JobTools();
 
     void SearchInit(Graph<Node> *graphOut, Graph<Node> *graphIn);
+    void ResultsInit(Queue<int> *);
     void Assign(Job);
+    void LockQueue();
+    void UnlockQueue();
     void print();
 };
 
