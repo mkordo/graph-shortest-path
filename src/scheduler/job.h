@@ -31,7 +31,7 @@ class WorkerTools
 {
   public:
     Queue<Job> *jobQueue;
-    Queue<int> *results;
+    Queue<int> *resultQueue;
     Search *search;
 
     int *jobsFinished;
@@ -46,12 +46,21 @@ class WorkerTools
     WorkerTools();
     ~WorkerTools();
 
-    void WorkerInit(int*, int*, pthread_cond_t*, pthread_mutex_t*, pthread_cond_t*);
+    void WorkerInit(int*, int*, pthread_mutex_t*, pthread_cond_t*);
     void SearchInit(Graph<Node> *graphOut, Graph<Node> *graphIn);
-    void Assign(Job);
-    void LockWorker();
-    void UnlockWorker();
     void Print();
+    void Assign(Job);
+    void Lock();
+    void Unlock();
+    void LockScheduler();
+	void UnlockScheduler();
+    void Wait();
+    void Wake();
+    void WorkFinished();
+    bool AllWorkersFinished();
+    void WakeScheduler();
+    bool GetJob(Job&);
+    bool GetResult(int&);
 };
 
 #endif

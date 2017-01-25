@@ -68,9 +68,9 @@ void createGraph(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *g
 }
 
 
-void runQueries2(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *graphDupl, string filename)
+void runQueries(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *graphDupl, string filename)
 {
-  Scheduler taskManager(graphOut, graphIn, 2);
+  Scheduler taskManager(graphOut, graphIn, 3);
   Job newJob;
   Parser reader(filename);
   Writer output("results.txt");
@@ -91,17 +91,30 @@ void runQueries2(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *g
     }
     else if(newJob.type == GUST) {
       stats.Gust();
-      //taskManager.UnlockAll();
-      taskManager.Init();
-      //taskManager.LockAll();
-    }    
-  }
 
-  //cout << "\n" << reader.getCount() << "\n";
+      // Ensure that all workers are blocked
+      taskManager.LockWorkers();
+        taskManager.WakeAll();
+      taskManager.UnlockWorkers();
+
+      taskManager.Wait();
+
+      taskManager.WriteResults(output);
+
+      taskManager.Init();
+    }
+  }
+  cout << "\nAll queries are finished!\n";
+  
+  // Ensure that all workers are blocked
+  taskManager.LockWorkers();
+      taskManager.StopAll();
+      taskManager.WakeAll();
+  taskManager.UnlockWorkers();
 }
 
 
-void runQueries(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *graphDupl, string filename)
+void runQueries2(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *graphDupl, string filename)
 {
   int type;
   uint32_t me, neighbor;
@@ -127,7 +140,6 @@ void runQueries(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *gr
       else stats.duplicatesQA++;
     }
   }
-  //cout << "\n" << reader.getCount() << "\n";
 }
 
 

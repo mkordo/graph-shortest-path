@@ -14,9 +14,9 @@ Parser::Parser(string filename_)
 
   if(file.peek() == 'D' || file.peek() == 'S') {
     getline(file, line);
-    cout << "Workload File: " << line << "\n";
+    //cout << "Workload File: " << line << "\n";
   }
-  count=0;
+  //count=0;
 }
 
 Parser::~Parser()
@@ -33,7 +33,7 @@ int Parser::getRow(uint32_t &me, uint32_t &neighbor)
       istringstream iss(line);
       if (!(iss >> me >> neighbor)) { return STOP; } // error
 
-      count++;
+      //count++;
       return INSERTION;
   }
   return STOP;
@@ -46,10 +46,13 @@ int Parser::getQuery(uint32_t &me, uint32_t &neighbor)
   if (getline(file, line))
   {
       //cout << line << endl;
-      if(line[0]=='F') { count++; return GUST; }
+      if(line[0]=='F') { 
+        //count++; 
+        return GUST; 
+      }
       istringstream iss(line);
       if (!(iss >> action >> me >> neighbor)) { cerr << "Query Parser: Error\n"; return STOP; } // error
-      count++;
+      //count++;
       if(action[0]=='Q') return QUESTION;
       else if(action[0]=='A') return INSERTION;
       else { cerr << "Parser: Invalid action given\n"; }
@@ -71,7 +74,9 @@ void Parser::printQuery(int type, uint32_t me, uint32_t neighbor)
   cout << me << " " << neighbor << endl;
 }
 
+/*
 uint32_t Parser::getCount()
 {
   return count;
 }
+*/

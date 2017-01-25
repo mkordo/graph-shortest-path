@@ -91,9 +91,9 @@ bool Queue<T>::pop(T& popped)
 {
   if(Queue<T>::isEmpty())
     return false;
-  else {    
-    front++;    
-    popped = queue[front-1];
+  else {
+    popped = queue[front];
+    front++;
     return true;
   }
 }
@@ -102,7 +102,7 @@ bool Queue<T>::pop(T& popped)
 template <class T>
 T Queue<T>::pop()
 {
-  front++;    
+  front++;
   return queue[front-1];
 }
 

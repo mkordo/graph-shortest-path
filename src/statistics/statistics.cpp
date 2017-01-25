@@ -35,8 +35,10 @@ void Statistics::Start() {
 
 void Statistics::CreatedGraphs() {
   created = clock();
-  if(pleasePrint)
-   cout << "\nCreated Graphs\n\nExecuting Queries...\n";
+  if(pleasePrint) {
+    cout << "\nCreated Graphs\n";
+    //cout << "\nExecuting Queries...\n";
+  }
 }
 
 void Statistics::ExecutedQueries() {

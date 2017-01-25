@@ -21,7 +21,6 @@ class Scheduler
     int workersTmp;
     int jobsFinished;
 
-    pthread_cond_t *workerCondition;
     pthread_mutex_t *schedulerMutex;
     pthread_cond_t *schedulerCondition;
 
@@ -31,8 +30,14 @@ class Scheduler
     void Assign(Job);
     void Execute();
     void Init();
-    void LockAll();
-    void UnlockAll();
+    void LockWorkers();
+    void UnlockWorkers();
+    void Lock();
+    void Unlock();
+    void Wait();
+    void WakeAll();
+    void StopAll();
+    void WriteResults(Writer&);
 };
 
 void* jobExecute(void *);

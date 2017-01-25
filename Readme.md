@@ -43,11 +43,10 @@ LOOP!
 
 	cond_wait (my_mutex_tmp_release)	// mutex is ALWAYS LOCKED apart from this part
 
-	Execute
 	if(STOP) {
-		scheduler_mutex_up
-		terminate
+		Exit LOOP
 	}
+	Execute ALL (LOOP2)
 
 	scheduler_mutex_down
 		Increase finishedJobs var
@@ -56,6 +55,7 @@ LOOP!
 		}
 	scheduler_mutex_up
 
+my_mutex_up
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -69,15 +69,15 @@ cond_wait (scheduler_mutex_up)		// Wait initialization of all threads
 LOOP!
 
 	give jobs
-	if(STOP) GIVE TO EVERY ONE!
 
 	All worker mutexes down (to ensure that all of them are unlocked by the cond)
 		signal all workers to start (broadcast condition)
 	All worker mutexes up
 
-	if(!STOP)
-		cond_wait (scheduler_mutex_up)	// mutex is ALWAYS LOCKED apart from this part
+	cond_wait (scheduler_mutex_up)	// mutex is ALWAYS LOCKED apart from this part
+	initialise all workers
 
+GIVE STOP JOB TO EVERY ONE!
 scheduler_mutex_up
 
 
