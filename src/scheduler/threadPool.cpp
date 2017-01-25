@@ -8,7 +8,7 @@ using namespace std;
 ThreadPool::ThreadPool(void *arg_, int workers_)
 {
 	int i, errnum;
-	JobTools *arg = (JobTools *) arg_;
+	WorkerTools *arg = (WorkerTools *) arg_;
 
 	workers = workers_;
 	pool = (pthread_t *) malloc(workers * sizeof(pthread_t));

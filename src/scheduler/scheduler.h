@@ -14,11 +14,16 @@ class Scheduler
 {
   public:
   	ThreadPool *pool;
-  	JobTools *info;
-    Queue<int> *results;
+  	WorkerTools *info;
+
+    uint32_t id;
     int workers;
     int workersTmp;
-    uint32_t id;
+    int jobsFinished;
+
+    pthread_cond_t *workerCondition;
+    pthread_mutex_t *schedulerMutex;
+    pthread_cond_t *schedulerCondition;
 
     Scheduler(Graph<Node> *graphOut, Graph<Node> *graphIn, int workers_ = 2);
     ~Scheduler();

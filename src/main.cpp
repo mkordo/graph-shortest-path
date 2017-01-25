@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <stdlib.h> /* srand, rand */
 #include <cstdint>  /* For uint32_t */
 #include <ctime>
 
@@ -28,6 +29,8 @@ int main(int argc, char** argv)
   stats.Start();
 
   cmd(argc, argv, filename, filenameQA);
+
+  srand (time(NULL));
 
   Graph<Node> graphOut;
   Graph<Node> graphIn;

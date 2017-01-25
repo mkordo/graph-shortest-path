@@ -1,5 +1,6 @@
 #include <iostream>
-#include <stdlib.h>
+#include <stdlib.h>     /* srand, rand */
+#include <unistd.h>
 
 #include "scheduler.h"
 
@@ -11,15 +12,31 @@ Scheduler::Scheduler(Graph<Node> *graphOut, Graph<Node> *graphIn, int workers_)
 	workers = workers_;
     workersTmp = 0;
     id=0;
-    results = new Queue<int>;
 
-	info = new JobTools [workers];
+    ////////////
+
+    jobsFinished = 0;
+    workerCondition = (pthread_cond_t*) malloc(sizeof(pthread_cond_t));
+    schedulerMutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
+    schedulerCondition = (pthread_cond_t*) malloc(sizeof(pthread_cond_t));
+    if(workerCondition==NULL || schedulerMutex==NULL || schedulerCondition==NULL) {
+    	std::cerr << "Scheduler Constructor : Malloc Error\n" ;
+    }
+
+    pthread_mutex_init (schedulerMutex, NULL);
+    pthread_cond_init (workerCondition , NULL);
+    pthread_cond_init (schedulerCondition , NULL);
+
+    ////////////
+
+	info = new WorkerTools [workers];
 	for(i=0; i<workers; i++) {
 		info[i].SearchInit(graphOut, graphIn);
-		info[i].ResultsInit(results);
+		info[i].WorkerInit(&workers, &jobsFinished, workerCondition, schedulerMutex, schedulerCondition);
+
+		//info[i].Print();
 	}
 
-	//Scheduler::LockAll();		// Ensure that no thread will read from Queue before master is ready
 	pool = new ThreadPool ((void*) info, workers);
 }
 
@@ -29,7 +46,15 @@ Scheduler::~Scheduler()
 	cout << "Job queue size: " << info->jobQueue->count() << "\n";
 	delete pool;
 	delete [] info;
-	delete results;
+
+	pthread_mutex_destroy(schedulerMutex);
+	free(schedulerMutex);
+
+	pthread_cond_destroy (workerCondition);
+	free(workerCondition);
+
+	pthread_cond_destroy (schedulerCondition);
+	free(schedulerCondition);
 }
 
 void Scheduler::Assign(Job newJob)
@@ -44,7 +69,7 @@ void Scheduler::LockAll()
 {
 	int i;
 	for(i=0; i<workers; i++) {
-		info[i].LockQueue();
+		info[i].LockWorker();
 	}
 }
 
@@ -52,7 +77,7 @@ void Scheduler::UnlockAll()
 {
 	int i;
 	for(i=0; i<workers; i++) {
-		info[i].UnlockQueue();
+		info[i].UnlockWorker();
 	}
 }
 
@@ -65,6 +90,7 @@ void Scheduler::Init()
 		info[0].jobQueue->init();
 		info[0].results->init();
 	}
+
 }
 
 
@@ -74,12 +100,17 @@ void Scheduler::Init()
 // Result Queue
 void* jobExecute(void* info_)
 {
-	JobTools *info = (JobTools *) info_;
+	WorkerTools *info = (WorkerTools *) info_;
 
-	//info[0].LockQueue();
+/*
+	//pthread_mutex_lock(info[0].schedulerMutex);
+		int tmp=rand()%10 + 1;
+		cout << "Sleeping for " << tmp << " ms\n\n";
+		usleep(tmp);
 
-
-
+		info[0].Print();
+	//pthread_mutex_unlock(info[0].schedulerMutex);
+*/
 	fflush(stdout);
 	return NULL;
 }

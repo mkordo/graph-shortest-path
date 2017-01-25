@@ -27,24 +27,31 @@ class Job
 
 std::ostream &operator<<(std::ostream &, Job const &);
 
-class JobTools
+class WorkerTools
 {
   public:
     Queue<Job> *jobQueue;
     Queue<int> *results;
     Search *search;
-    pthread_mutex_t *jobQueueMutex;
-    pthread_mutex_t *resultsMutex;
 
-    JobTools();
-    ~JobTools();
+    int *jobsFinished;
+    int *totalWorkers;
 
+    pthread_mutex_t *workerMutex;
+    pthread_cond_t *workerCondition;
+
+    pthread_mutex_t *schedulerMutex;
+    pthread_cond_t *schedulerCondition;
+
+    WorkerTools();
+    ~WorkerTools();
+
+    void WorkerInit(int*, int*, pthread_cond_t*, pthread_mutex_t*, pthread_cond_t*);
     void SearchInit(Graph<Node> *graphOut, Graph<Node> *graphIn);
-    void ResultsInit(Queue<int> *);
     void Assign(Job);
-    void LockQueue();
-    void UnlockQueue();
-    void print();
+    void LockWorker();
+    void UnlockWorker();
+    void Print();
 };
 
 #endif

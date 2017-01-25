@@ -45,60 +45,66 @@ std::ostream &operator<<(std::ostream &os, Job const &theJob) {
 
 ////////////////
 
-JobTools::JobTools()
+WorkerTools::WorkerTools()
 {
-	jobQueueMutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
-	resultsMutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
-	
-	pthread_mutex_init(jobQueueMutex, NULL);
-	pthread_mutex_init(resultsMutex, NULL);
+	workerMutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init(workerMutex, NULL);
 
 	jobQueue = new Queue<Job>;
-    //results = new Queue<int>;
+    results = new Queue<int>;
 }
 
-JobTools::~JobTools()
+WorkerTools::~WorkerTools()
 {
-	pthread_mutex_destroy(jobQueueMutex);
-	pthread_mutex_destroy(resultsMutex);
-
-	free(jobQueueMutex);
-	free(resultsMutex);
+	pthread_mutex_destroy(workerMutex);
+	free(workerMutex);
 
 	delete jobQueue;
-	//delete results;
+	delete results;
 
 	delete search;
 }
 
-void JobTools::print()
-{
-	cout << "Printing mutexes: " << jobQueueMutex << endl;
-}
-
-void JobTools::SearchInit(Graph<Node> *graphOut, Graph<Node> *graphIn)
+void WorkerTools::SearchInit(Graph<Node> *graphOut, Graph<Node> *graphIn)
 {
 	search = new Search(graphOut, graphIn);
 }
 
-void JobTools::ResultsInit(Queue<int> *results_)
+void WorkerTools::WorkerInit(int* totalWorkers_, int* jobsFinished_, pthread_cond_t* workerCondition_, pthread_mutex_t* schedulerMutex_, pthread_cond_t* schedulerCondition_)
 {
-	results = results_;
+    totalWorkers = totalWorkers_;
+    jobsFinished = jobsFinished_;
+
+    workerCondition = workerCondition_;
+
+    schedulerMutex = schedulerMutex_;
+    schedulerCondition = schedulerCondition_;
 }
 
-void JobTools::Assign(Job newJob)
+void WorkerTools::Assign(Job newJob)
 {
-	//pthread_mutex_lock(jobQueueMutex);
 	jobQueue->push(newJob);
-	//pthread_mutex_unlock(jobQueueMutex);
 }
 
-void JobTools::LockQueue()
+void WorkerTools::LockWorker()
 {
-	pthread_mutex_lock(jobQueueMutex);
+	pthread_mutex_lock(workerMutex);
 }
 
-void JobTools::UnlockQueue()
+void WorkerTools::UnlockWorker()
 {
-	pthread_mutex_unlock(jobQueueMutex);
+	pthread_mutex_unlock(workerMutex);
+}
+
+void WorkerTools::Print()
+{
+	cout << "\n";
+	cout << "Total Workers : " << *totalWorkers << "\n";
+	cout << "Jobs Finished : " << *jobsFinished << "\n";
+	cout << "Print Mutexes : \n";
+	cout << "  My Mutex : " << workerMutex << "\n";
+	cout << "  Scheduler Mutex : " << schedulerMutex << "\n";
+	cout << "Print Conditions :  \n";
+	cout << "  Workers\' Condition : " << workerCondition << "\n";
+	cout << "  Scheduler\'s Condition : " << schedulerCondition << "\n\n";
 }
