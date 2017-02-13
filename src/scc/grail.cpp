@@ -41,10 +41,40 @@ int HyperGraph(Graph<Node>& hyper, Graph<HashNode> &hyperDupl ,Graph<Node>& grap
 
 
 grail::grail(uint32_t size_){
+	size=size_;
+	minRank=(uint32_t*)malloc(size*sizeof(uint32_t));
+	if(minRank==NULL) cerr << "Grail Constructor : Malloc1" << endl;
+	rank=(uint32_t*)malloc(size*sizeof(uint32_t));
+	if(rank==NULL) cerr << "Grail Constructor : Malloc2" << endl;
+	marked=(bool*)malloc(size*sizeof(bool));
+	if(marked==NULL) cerr << "Grail Constructor : Malloc3" << endl;	
+	for(uint32_t i=0;i<size;i++){
+		minRank[i]=UINT32_MAX;
+		rank[i]=UINT32_MAX;
+		marked[i]=false;
+	}
+	
 }
 	
 grail::~grail(){
+	free(minRank);
+	free(rank);
 }
 			
-int grail::buildGrail(Graph<Node>& graph, scc<Component>& SCC){
+int grail::build(Graph<Node>& graph){
+	cout<<endl<<"----------------------------------------------------GRAIL"<<endl;
+	cout<<size<<endl;
+	uint32_t i;
+	for(i=0;i<=size;i++){
+		if( !marked[i] ) {
+			postOrder(graph,i);
+		}
+	}
+	
+}
+
+
+int grail::postOrder(Graph<Node>& graph,uint32_t head){
+		cout<<"post order from "<<head<<endl;
+		
 }

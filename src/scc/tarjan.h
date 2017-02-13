@@ -18,10 +18,10 @@ class meTARZANyouJANE
   	Stack<uint32_t> SCC_stack;
   	Stack<uint32_t> Parent_stack;
   	Stack<uint32_t> Children_stack;
-  	uint32_t sizePanos;
   	
   	
 		meTARZANyouJANE(uint32_t);
+		void saveSpace();
 		int strongConnect(Graph<Node>&, uint32_t, uint32_t &, scc<Component> &);
 		int tarjan(Graph<Node>& graph, scc<Component> &);
 		

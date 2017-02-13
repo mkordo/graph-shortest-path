@@ -8,12 +8,19 @@ class grail{
 	 public:
 			uint32_t *minRank;
 			uint32_t *rank;
+			bool *marked;
 			uint32_t size;
 			
-			grail(uint32_t size_=128);
+			Queue<uint32_t> iteration;
+			
+			grail(uint32_t);
 			~grail();
 			
-			int buildGrail(Graph<Node>& graph, scc<Component>& SCC);
+			int build(Graph<Node>& graph);
+			
+			int postOrder(Graph<Node>& graph, uint32_t);
+			
+			
 			//bool isReachableGrailIndex(GrailIndex* index, uint32_t source_node, uint32_t target_node);
 };
 

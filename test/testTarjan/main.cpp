@@ -36,7 +36,7 @@ int main(int argc, char** argv)
   Graph<HashNode> graphDupl;
 
   createGraph(graphOut, graphIn, graphDupl, filename);
-  //graphOut.print();
+  graphOut.print();
   //graphIn.print();
   //stats.CreatedGraphs();
   //--------------------------------------------------------------------
@@ -47,8 +47,9 @@ int main(int argc, char** argv)
   //SCC.printBelong();return 0;
 	meTARZANyouJANE T(max(graphOut.last,graphIn.last)+1);
 	T.tarjan(graphOut,SCC);
+	//T.saveSpace();
 	SCC.print();
-	//SCC.printBelong();
+	SCC.printBelong();
 	//for(i=0;i<max(graphOut.last,graphIn.last)+1;i++){
 	//		cout<<i<<"("<<T.findNodeSCC(i)<<")";
 	//}
@@ -56,8 +57,14 @@ int main(int argc, char** argv)
 	Graph<Node> hyper;
 	Graph<HashNode> hyperDupl;
   HyperGraph(hyper, hyperDupl, graphOut, SCC);
-  //cout<<"hypergraph size: "<<hyper.
-  //hyper.print();
+  cout<<"hypergraph size: ("<<hyper.last+1<<")\n";
+  hyper.print();
+  
+  grail G(hyper.last);
+  G.build(hyper);
+  
+  //grail G(graphOut.last);
+  //G.build(graphOut);
   
   //--------------------------------------------------------------------
   //runQueries(graphOut, graphIn, graphDupl, filenameQA,T.SCC);
@@ -65,7 +72,7 @@ int main(int argc, char** argv)
 
   stats.finalSizes(graphOut.size, graphIn.size, graphDupl.size);
   stats.finalUsedSizes(graphOut.last, graphIn.last, graphDupl.last);
-  stats.Print();
+ // stats.Print();
   return 0;
 }
 

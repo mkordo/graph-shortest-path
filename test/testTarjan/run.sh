@@ -6,10 +6,12 @@ clear
 #valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./bin/shortest-path -f datasets/wikiExample.txt 
 #./bin/shortest-path -f datasets/wikiExample.txt 
 #./bin/shortest-path -f datasets/theirExample.txt 
+./bin/shortest-path -f datasets/grailSimple.txt 
+
 #./bin/shortest-path -f ../../datasets/tiny/tinyGraph.txt 
 #./bin/shortest-path -f ../../datasets/small/smallGraph.txt
 #valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./bin/shortest-path -f ../../datasets/small/smallGraph.txt 
-./bin/shortest-path -f ../../datasets/medium/mediumGraph.txt
+#./bin/shortest-path -f ../../datasets/medium/mediumGraph.txt
 
 #./bin/shortest-path -f ../../datasets/tiny/tinyGraph.txt -q ../../datasets/tiny/tinyWorkload_FINAL.txt && diff "./results.txt" "../.././datasets/tiny/tinyWorkload_RESULTS.txt"
 #./bin/shortest-path -f ../../datasets/small/smallGraph.txt -q ../../datasets/small/smallWorkload_FINAL.txt && diff "./results.txt" "../.././datasets/small/smallWorkload_RESULTS.txt"

@@ -8,7 +8,6 @@ using namespace std;
 
 meTARZANyouJANE::meTARZANyouJANE(uint32_t s){
 	uint32_t i;
-	sizePanos = s;
 	cout << "size of tarzan " << s << endl;
 	marked=(bool*)malloc(s*sizeof(bool));
 	if(marked==NULL) cerr << "meTARZANyouJANE Constructor : Malloc1" << endl;
@@ -31,15 +30,23 @@ meTARZANyouJANE::meTARZANyouJANE(uint32_t s){
 }
 
 meTARZANyouJANE::~meTARZANyouJANE(){
-	//cout << "Destroy meTARZANyouJANE\n";
-	free(marked);
-	free(onStack);
-	free(defined);
-	free(index);
-	free(lowlink);
-	//cout << "Destroy meTARZANyouJANE\n";
+	if (marked!=NULL)  free(marked);
+	if (onStack!=NULL) free(onStack);
+	if (defined!=NULL) free (defined);
+	if (index!=NULL)   free(index);
+	if (lowlink!=NULL) free(lowlink);
 };
 
+void meTARZANyouJANE::saveSpace(){
+	free(onStack);
+	onStack=NULL;
+	free (defined);
+	defined=NULL;
+	free(index);
+	index=NULL;
+	free(lowlink);
+	lowlink=NULL;
+}
 
 int meTARZANyouJANE::tarjan(Graph<Node>& graph, scc<Component> & SCC){
 	uint32_t i;
@@ -51,6 +58,7 @@ int meTARZANyouJANE::tarjan(Graph<Node>& graph, scc<Component> & SCC){
 			strongConnect(graph,i,index_, SCC);
 		}
 	}
+	saveSpace();
 	return 0;
 }
 
@@ -74,7 +82,6 @@ int meTARZANyouJANE::strongConnect(Graph<Node> &graph, uint32_t head ,uint32_t &
 		}
 	while(1){ // Consider successors of v
 		x = neigb[i];
-		if(x>=sizePanos){ cout << "size of tarzan breached " << x << "\t" << sizePanos << endl; exit(-1);}
 		if(defined[x]==false){ 	// Successor w has not yet been visited; recurse on it
 			
 			index[x]=index_;
@@ -119,7 +126,6 @@ int meTARZANyouJANE::strongConnect(Graph<Node> &graph, uint32_t head ,uint32_t &
 			}			
 			if(Children_stack.isEmpty() || Parent_stack.isEmpty()) break;
 			i=Children_stack.pop();x=Parent_stack.pop();
-			if(x>=sizePanos){ cout << "size of tarzan breached " << x << "\t" << sizePanos << endl; exit(-1);}
 			lowlink[x]=min(lowlink[head],lowlink[x]);
 			head=x;
 			s=graph.getNodeSize(head);
