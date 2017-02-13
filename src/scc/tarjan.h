@@ -18,7 +18,6 @@ class meTARZANyouJANE
   	Stack<uint32_t> SCC_stack;
   	Stack<uint32_t> Parent_stack;
   	Stack<uint32_t> Children_stack;
-  	uint32_t sizePanos;
   	
   	
 		meTARZANyouJANE(uint32_t);
