@@ -5,7 +5,7 @@
 #include <cstdint>  /* For uint32_t */
 #include <fstream>
 
-enum { QUESTION, INSERTION, GUST, STOP };
+enum { QUESTION=0, INSERTION, GUST, STOP };
 
 class Parser
 {
