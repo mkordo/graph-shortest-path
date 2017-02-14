@@ -79,7 +79,7 @@ int meTARZANyouJANE::strongConnect(Graph<Node> &graph, uint32_t head ,uint32_t &
 		SCC.count++;
 		SCC.insert(head);
 		return 0;
-		}
+	}
 	while(1){ // Consider successors of v
 		x = neigb[i];
 		if(defined[x]==false){ 	// Successor w has not yet been visited; recurse on it

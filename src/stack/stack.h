@@ -23,6 +23,7 @@ class Stack
 	void push(T);
 	void pushBlock(T*, uint32_t);
 	T pop();
+	uint32_t top();
 	void print();
 	void expand(uint32_t minSize = 1);
 	uint32_t count();

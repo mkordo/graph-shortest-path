@@ -5,8 +5,11 @@ clear
 #./bin/shortest-path -f datasets/dfsExample.txt 
 #valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./bin/shortest-path -f datasets/wikiExample.txt 
 #./bin/shortest-path -f datasets/wikiExample.txt 
-#./bin/shortest-path -f datasets/theirExample.txt 
-./bin/shortest-path -f datasets/grailSimple.txt 
+./bin/shortest-path -f datasets/theirExample.txt 
+#valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./bin/shortest-path -f datasets/grailSimple.txt 
+#valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./bin/shortest-path -f datasets/grailSimple.txt 
+#./bin/shortest-path -f datasets/grailSimple.txt 
+#./bin/shortest-path -f datasets/grail1level.txt 
 
 #./bin/shortest-path -f ../../datasets/tiny/tinyGraph.txt 
 #./bin/shortest-path -f ../../datasets/small/smallGraph.txt

@@ -22,7 +22,7 @@ Stack<T>::Stack(int size_)
 template <class T>
 Stack<T>::~Stack()
 {
-  free(stack);
+  if(stack!=NULL) free(stack);
   //cout << "Destroyed stack - Final size: " << size << "\n";
 }
 
@@ -96,6 +96,11 @@ T Stack<T>::pop()
     next--;
     return stack[next];
   }
+}
+
+template <class T>
+uint32_t Stack<T>::top(){
+		return stack[next-1];
 }
 
 template <class T>

@@ -57,14 +57,14 @@ int main(int argc, char** argv)
 	Graph<Node> hyper;
 	Graph<HashNode> hyperDupl;
   HyperGraph(hyper, hyperDupl, graphOut, SCC);
-  cout<<"hypergraph size: ("<<hyper.last+1<<")\n";
+  //cout<<"hypergraph size: ("<<hyper.last+1<<")\n";
   hyper.print();
   
   grail G(hyper.last);
-  G.build(hyper);
+  G.build(hyper, hyper);
   
-  //grail G(graphOut.last);
-  //G.build(graphOut);
+ // grail G(max(graphOut.last,graphIn.last)+1);
+  //G.build(graphOut,graphIn);
   
   //--------------------------------------------------------------------
   //runQueries(graphOut, graphIn, graphDupl, filenameQA,T.SCC);
