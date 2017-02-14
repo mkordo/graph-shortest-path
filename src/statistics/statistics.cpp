@@ -23,6 +23,8 @@ Statistics::Statistics(bool pleasePrint_) {
     sizeGraphUsedOut = 0;
     sizeGraphUsedIn = 0;
     sizeGraphUsedDupl = 0;
+
+    numOfVersions = 0;
 }
 
 Statistics::~Statistics() {}
@@ -73,6 +75,11 @@ void Statistics::Gust()
   gusts++;
 }
 
+void Statistics::totalNumOfVersions(int num)
+{
+  numOfVersions = num;
+}
+
 uint32_t Statistics::getQueries()
 {
   return queries;
@@ -88,6 +95,9 @@ void Statistics::Print() {
 
     cout << "Duplicates in creation : " << duplicates << "\n";
     cout << "Duplicates in queries : " << duplicatesQA << "\n\n";
+
+    cout << "Total number of versions : " << numOfVersions << "\n\n";
+
     //*
     cout << "Sise of graph used: Out: " << sizeGraphUsedOut << "\n";
     cout << "Sise of graph used: In: " << sizeGraphUsedIn << "\n";

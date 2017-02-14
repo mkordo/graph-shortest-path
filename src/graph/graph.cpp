@@ -86,10 +86,17 @@ uint32_t* Graph<T>::getNodeNeighbor(uint32_t me)
 }
 
 template <class T>
+int* Graph<T>::getNodeVersion(uint32_t me)
+{
+  return buffer[me].getVersion();
+}
+
+template <class T>
 uint32_t Graph<T>::getNodeSize(uint32_t me)
 {
   return buffer[me].getSize();
 }
+
 
 template <class T>
 void Graph<T>::print()
@@ -130,6 +137,13 @@ void Graph<T>::resize(uint32_t newSize)
   size=newSize;
   cout << "Resize Graph : New size " << size << "\n";
 }
+
+template <class T>
+void Graph<T>::changeVersion()
+{
+  version++;
+}
+
 
 /* Inform the compiler about which types we are going to use the template */
 template class Graph<Node>;

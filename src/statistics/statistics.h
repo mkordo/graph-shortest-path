@@ -28,6 +28,8 @@ class Statistics
     uint32_t queries;
     uint32_t gusts;
 
+    int numOfVersions;
+
     Statistics(bool pleasePrint_ = true);
     ~Statistics();
 
@@ -41,6 +43,7 @@ class Statistics
     void Query();
     void Gust();
     uint32_t getQueries();
+    void totalNumOfVersions(int);
 };
 
 #endif

@@ -26,7 +26,7 @@ int Search::ShortestPath(uint32_t nodeA, uint32_t nodeB)
 {
 	if(graphOut->inBounds(nodeA)==false || graphIn->inBounds(nodeB)==false) return -1;
 	if(nodeA == nodeB) return 0;
-	if(graphOut->getNodeSize(nodeA)==false || graphIn->getNodeSize(nodeB)==false)	return -1;
+	if(graphOut->getNodeSize(nodeA)==false || graphIn->getNodeSize(nodeB)==false) return -1;
 
 	Search::init(graphIn->size, graphOut->size);
 	bool found = false;
@@ -56,6 +56,10 @@ int Search::ShortestPath(uint32_t nodeA, uint32_t nodeB)
 bool Search::bfs(Graph<Node>* myGraph, Queue<uint32_t>& myQueue, bool* myVisited, bool* theirVisited)
 {
 	uint32_t max, i, head, *neigb, size, j;
+	int *version;
+	int graphVersion;
+
+	graphVersion = myGraph->version;
 
 	max=myQueue.count();
 	for(i=0; i<max; i++){
@@ -64,8 +68,11 @@ bool Search::bfs(Graph<Node>* myGraph, Queue<uint32_t>& myQueue, bool* myVisited
 
 		size=myGraph->getNodeSize(head);
 		neigb=myGraph->getNodeNeighbor(head);
+		version=myGraph->getNodeVersion(head);
 
 		for(j=0;j<size;j++){
+			if(version[j] > graphVersion) continue;
+
 			if(myVisited[neigb[j]]==false) {
 				myVisited[neigb[j]]=true;
 				myQueue.push(neigb[j]); 

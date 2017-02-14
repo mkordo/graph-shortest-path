@@ -17,6 +17,7 @@ class HashNode
     void print();
     void init(uint32_t size_ = 103);
     uint32_t getSize();
+    int* getVersion();
 
   private:
     bool findCell(uint32_t);

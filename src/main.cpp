@@ -45,6 +45,7 @@ int main(int argc, char** argv)
   runQueries(&graphOut, &graphIn, &graphDupl, filenameQA);
   stats.ExecutedQueries();
 
+  stats.totalNumOfVersions(graphOut.version);
   stats.finalSizes(graphOut.size, graphIn.size, graphDupl.size);
   stats.finalUsedSizes(graphOut.last, graphIn.last, graphDupl.last);
   stats.Print();
@@ -70,10 +71,11 @@ void createGraph(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *g
 
 void runQueries(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *graphDupl, string filename)
 {
-  Scheduler taskManager(graphOut, graphIn, 3);
+  Scheduler taskManager(graphOut, graphIn, 1);
   Job newJob;
   Parser reader(filename);
   Writer output("results.txt");
+  int oldType=-1;
 
   while( ( newJob.type = reader.getQuery(newJob.me, newJob.neighbor) ) != STOP ) {
     //reader.printQuery(type, me, neighbor);
@@ -84,6 +86,10 @@ void runQueries(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *gr
     else if(newJob.type == INSERTION) {
       stats.Insertion();
       if( graphDupl->insert(newJob.me, newJob.neighbor) == true ) {
+        if(oldType == QUESTION) {
+          graphOut->changeVersion();
+          graphIn->changeVersion();
+        }
         graphOut->insert(newJob.me, newJob.neighbor);
         graphIn->insert(newJob.neighbor, newJob.me);
       }
@@ -103,6 +109,7 @@ void runQueries(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *gr
 
       taskManager.Init();
     }
+    oldType = newJob.type;
   }
   cout << "\nAll queries are finished!\n";
   

@@ -24,7 +24,9 @@ class Graph
     bool inBounds(uint32_t);
     uint32_t getNodeSize(uint32_t);
     uint32_t* getNodeNeighbor(uint32_t);
+    int* getNodeVersion(uint32_t);
     void printNode(uint32_t);
+    void changeVersion();
 
   private:
     void expand(uint32_t);
