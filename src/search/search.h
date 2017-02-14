@@ -10,6 +10,7 @@ class Search
   public:
     uint32_t steps;
     uint32_t size;
+    int currentVersion;
     bool *visitedIn;
     bool *visitedOut;
 
@@ -22,10 +23,10 @@ class Search
     Search(Graph<Node>*, Graph<Node>*);
     ~Search();
 
-    int ShortestPath(uint32_t, uint32_t);
+    int ShortestPath(uint32_t, uint32_t, int);
 
   private:
-    void init(uint32_t, uint32_t);
+    void init(uint32_t, uint32_t, int);
 
     bool bfs(Graph<Node>*, Queue<uint32_t>&, bool*, bool*);
 };

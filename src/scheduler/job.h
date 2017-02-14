@@ -16,8 +16,9 @@ class Job
   	int type;
   	uint32_t me;
   	uint32_t neighbor;
+    int version;
 
-    Job(uint32_t id_=0, int type_=0, uint32_t me_=0, uint32_t neighbor_=0);
+    Job(uint32_t id_=0, int type_=0, uint32_t me_=0, uint32_t neighbor_=0, int version_=0);
     ~Job();
 
     int execute();

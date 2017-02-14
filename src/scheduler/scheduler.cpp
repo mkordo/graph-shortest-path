@@ -183,7 +183,7 @@ void* jobExecute(void* info_)
 		}
 
 		do {
-			searchResult = info[0].search->ShortestPath(newJob.me, newJob.neighbor);
+			searchResult = info[0].search->ShortestPath(newJob.me, newJob.neighbor, newJob.version);
 			info[0].resultQueue->push(searchResult);
 
 		} while( info[0].GetJob(newJob) == true );

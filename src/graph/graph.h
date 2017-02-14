@@ -27,6 +27,7 @@ class Graph
     int* getNodeVersion(uint32_t);
     void printNode(uint32_t);
     void changeVersion();
+    int getVersion();
 
   private:
     void expand(uint32_t);

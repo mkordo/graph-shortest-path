@@ -14,6 +14,8 @@ Search::Search(Graph<Node> *graphOut_, Graph<Node> *graphIn_) {
 	size = 0;
 	visitedIn = NULL;
 	visitedOut = NULL;
+
+	currentVersion=0;
 }
 
 Search::~Search()
@@ -22,13 +24,13 @@ Search::~Search()
 	if(visitedOut!=NULL) free(visitedOut);
 }
 
-int Search::ShortestPath(uint32_t nodeA, uint32_t nodeB)
+int Search::ShortestPath(uint32_t nodeA, uint32_t nodeB, int version_)
 {
 	if(graphOut->inBounds(nodeA)==false || graphIn->inBounds(nodeB)==false) return -1;
 	if(nodeA == nodeB) return 0;
 	if(graphOut->getNodeSize(nodeA)==false || graphIn->getNodeSize(nodeB)==false) return -1;
 
-	Search::init(graphIn->size, graphOut->size);
+	Search::init(graphIn->size, graphOut->size, version_);
 	bool found = false;
 
 	frontSearch.push(nodeA);
@@ -45,7 +47,7 @@ int Search::ShortestPath(uint32_t nodeA, uint32_t nodeB)
 		}
 		else {
 			steps++;
-			if ( Search::bfs(graphIn, backSearch, visitedIn, visitedOut) == true ) return steps;   //found a solution
+			if ( Search::bfs(graphIn, backSearch, visitedIn, visitedOut) == true ) return steps; //found a solution
 		}
 		//break;
 	}
@@ -56,10 +58,7 @@ int Search::ShortestPath(uint32_t nodeA, uint32_t nodeB)
 bool Search::bfs(Graph<Node>* myGraph, Queue<uint32_t>& myQueue, bool* myVisited, bool* theirVisited)
 {
 	uint32_t max, i, head, *neigb, size, j;
-	int *version;
-	int graphVersion;
-
-	graphVersion = myGraph->version;
+	int *myVersion;
 
 	max=myQueue.count();
 	for(i=0; i<max; i++){
@@ -68,10 +67,10 @@ bool Search::bfs(Graph<Node>* myGraph, Queue<uint32_t>& myQueue, bool* myVisited
 
 		size=myGraph->getNodeSize(head);
 		neigb=myGraph->getNodeNeighbor(head);
-		version=myGraph->getNodeVersion(head);
+		myVersion=myGraph->getNodeVersion(head);
 
 		for(j=0;j<size;j++){
-			if(version[j] > graphVersion) continue;
+			if(myVersion[j] > currentVersion) continue;
 
 			if(myVisited[neigb[j]]==false) {
 				myVisited[neigb[j]]=true;
@@ -79,15 +78,17 @@ bool Search::bfs(Graph<Node>* myGraph, Queue<uint32_t>& myQueue, bool* myVisited
 			}
 			if (theirVisited[neigb[j]]==true) return true;
 		}
-			
+
 		if(theirVisited[head]==true) return true;
 	}
 	return false;
 }
 
-void Search::init(uint32_t sizeIn, uint32_t sizeOut)
+void Search::init(uint32_t sizeIn, uint32_t sizeOut, int version_)
 {
 	uint32_t max;
+
+	currentVersion = version_;
 
 	/* Initialize local variables */
 	steps=0;

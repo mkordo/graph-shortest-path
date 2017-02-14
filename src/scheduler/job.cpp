@@ -3,12 +3,13 @@
 
 using namespace std;
 
-Job::Job(uint32_t id_, int type_, uint32_t me_, uint32_t neighbor_)
+Job::Job(uint32_t id_, int type_, uint32_t me_, uint32_t neighbor_, int version_)
 {
 	id = id_;
 	type = type_;
 	me = me_;
 	neighbor = neighbor_;
+	version = version_;
 }
 
 Job::~Job()

@@ -97,6 +97,12 @@ uint32_t Graph<T>::getNodeSize(uint32_t me)
   return buffer[me].getSize();
 }
 
+template <class T>
+int Graph<T>::getVersion()
+{
+  return version;
+}
+
 
 template <class T>
 void Graph<T>::print()

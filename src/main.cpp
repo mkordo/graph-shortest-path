@@ -71,7 +71,7 @@ void createGraph(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *g
 
 void runQueries(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *graphDupl, string filename)
 {
-  Scheduler taskManager(graphOut, graphIn, 1);
+  Scheduler taskManager(graphOut, graphIn, 2);
   Job newJob;
   Parser reader(filename);
   Writer output("results.txt");
@@ -81,6 +81,7 @@ void runQueries(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *gr
     //reader.printQuery(type, me, neighbor);
     if(newJob.type == QUESTION) {
       stats.Query();
+      newJob.version = graphOut->getVersion();
       taskManager.Assign(newJob);
     }
     else if(newJob.type == INSERTION) {
@@ -131,11 +132,13 @@ void runQueries2(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *g
   Search search(graphOut, graphIn);
   int result;
 
+  int version=0;
+
   while( ( type = reader.getQuery(me, neighbor) ) != STOP ) {
     //reader.printQuery(type, me, neighbor);
     if(type == QUESTION) {
       stats.Query();
-      result = search.ShortestPath(me, neighbor);
+      result = search.ShortestPath(me, neighbor, version);
       output.writeInt(result);
     }
     else if(type == INSERTION) {
