@@ -1,4 +1,4 @@
-OBJ = bin/main.o bin/queue.o
+OBJ = bin/main.o bin/queue.o﻿﻿
 EXE = bin/test
 DIR = bin
 
