@@ -37,30 +37,23 @@ int Search::ShortestPath(Graph<Node>& graphOut, Graph<Node>& graphIn, uint32_t n
 
 	while(!frontSearch.isEmpty() && !backSearch.isEmpty())
 	{
-		/*if(frontSearch.count() < backSearch.count()) // Always search the smallest queue!
-		{
-			stepsFront++;
-			// found = Search::bfs
-			if(found==true) {
-				return stepsFront + stepsBack;
-			}
+		if(frontSearch.count() < backSearch.count()) { // Always search the smallest queue!
+			steps++;
+			if ( Search::bfs(graphOut, frontSearch, visitedOut, visitedIn) == true ) return steps; //found a solution 
 		}
-		else
-		{
-			stepsBack++;
-			// found = Search::bfs
-			if(found==true) {
-				return stepsFront + stepsBack;
-			}
-		}*/
+		else {
+			steps++;
+			if ( Search::bfs(graphIn, backSearch, visitedIn, visitedOut) == true ) return steps; //found a solution
+		}
+		//break;
 
-		steps++;
+		/*steps++;
 		if ( Search::bfs(graphOut, frontSearch, visitedOut, visitedIn) == true ) return steps; //found a solution 
 
 		steps++;
 		if ( Search::bfs(graphIn, backSearch, visitedIn, visitedOut) == true ) return steps;   //found a solution
 
-		//break;
+		//break;*/
 	}
 
 	return -1;
@@ -131,32 +124,25 @@ int Search::ShortestPath(Graph<Node>& graphOut, Graph<Node>& graphIn, uint32_t n
 
 	while(!frontSearch.isEmpty() && !backSearch.isEmpty())
 	{
-		/*if(frontSearch.count() < backSearch.count()) // Always search the smallest queue!
-		{
-			stepsFront++;
-			// found = Search::bfs
-			if(found==true) {
-				return stepsFront + stepsBack;
-			}
+		if(frontSearch.count() < backSearch.count()) { // Always search the smallest queue!
+			steps++;
+			if ( Search::bfs(graphOut, frontSearch, visitedOut, visitedIn, SCC.belongs[nodeA], SCC.belongs) == true ) return steps; //found a solution 
 		}
-		else
-		{
-			stepsBack++;
-			// found = Search::bfs
-			if(found==true) {
-				return stepsFront + stepsBack;
-			}
-		}*/
+		else {
+			steps++;
+			if ( Search::bfs(graphIn, backSearch, visitedIn, visitedOut,SCC.belongs[nodeA], SCC.belongs) == true ) return steps;   //found a solution
+		}
+		//break;
     
-		steps++;
-		cout<<"\nFront\n";
+		/*steps++;
+		//cout<<"\nFront\n";
 		if ( Search::bfs(graphOut, frontSearch, visitedOut, visitedIn, SCC.belongs[nodeA], SCC.belongs) == true ) return steps; //found a solution 
 
 		steps++;
-		cout<<"\nBAck\n";
+		//cout<<"\nBAck\n";
 		if ( Search::bfs(graphIn, backSearch, visitedIn, visitedOut,SCC.belongs[nodeA], SCC.belongs) == true ) return steps;   //found a solution
 
-		//break;
+		//break;*/
 	}
 
 	return -1;

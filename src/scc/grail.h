@@ -24,6 +24,8 @@ class grail{
 			int postOrder(Graph<Node>& graph, Graph<Node>& graph2, uint32_t, uint32_t&);
 			int postOrder(Graph<Node>& graph, uint32_t, uint32_t&);
 			
+			bool maybe( uint32_t source_node,uint32_t target_node);
+			
 			
 			//bool isReachableGrailIndex(GrailIndex* index, uint32_t source_node, uint32_t target_node);
 };
