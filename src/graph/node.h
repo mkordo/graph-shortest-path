@@ -8,7 +8,7 @@ class Node
   public:
     uint32_t size;
     uint32_t current;
-    //uint32_t *version;
+    int *version;
     uint32_t *neighbor;
 
     Node(uint32_t size_ = 103);
@@ -19,6 +19,7 @@ class Node
     void print();
     void init(uint32_t size_ = 103);
     uint32_t getSize();
+    int* getVersion();
 
   private:
     void expand();

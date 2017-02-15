@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../scheduler/job.h"
 #include "queue.h"
 
 template <class T>
@@ -86,14 +87,23 @@ void Queue<T>::expand(uint32_t minSize)
 }
 
 template <class T>
-T Queue<T>::pop()
+bool Queue<T>::pop(T& popped)
 {
   if(Queue<T>::isEmpty())
-    return UINT32_MAX;
-  else {    
+    return false;
+  else {
+    popped = queue[front];
     front++;
-    return queue[front-1];
+    return true;
   }
+}
+
+// Must not be used unless we are sure that the queue is not empty
+template <class T>
+T Queue<T>::pop()
+{
+  front++;
+  return queue[front-1];
 }
 
 template <class T>
@@ -126,4 +136,6 @@ void Queue<T>::print()
 
 /* Inform the compiler about which types we are going to use the template */
 template class Queue<uint32_t>;
+template class Queue<int>;
+template class Queue<Job>;
 

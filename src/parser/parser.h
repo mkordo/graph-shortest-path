@@ -5,14 +5,14 @@
 #include <cstdint>  /* For uint32_t */
 #include <fstream>
 
-enum { QUESTION, INSERTION, GUST, STOP };
+enum { QUESTION=0, INSERTION, GUST, STOP };
 
 class Parser
 {
   private:
     std::ifstream file;
     std::string filename;
-    uint32_t count;
+    //uint32_t count;
 
   public:
 
@@ -21,7 +21,7 @@ class Parser
 
     int getRow(uint32_t&, uint32_t&);
     int getQuery(uint32_t&, uint32_t&);
-    uint32_t getCount();
+    //uint32_t getCount();
     void printRow(uint32_t, uint32_t);
     void printQuery(int, uint32_t, uint32_t);
 };

@@ -42,6 +42,11 @@ uint32_t HashNode::getSize()
   return size;
 }
 
+int* HashNode::getVersion()
+{
+  return NULL;
+}
+
 bool HashNode::insert(uint32_t neighbor_, uint32_t version_)
 {
   if( ( ((double) inserted)/size ) > 0.5 ) {

@@ -26,3 +26,4 @@ void Writer::writeStr(string str)
 {
   file << str << "\n";
 }
+
