@@ -4,7 +4,7 @@
 #include "parser.h"
 
 using namespace std;
-
+int filetype;
 Parser::Parser(string filename_)
 {
   string line;
@@ -13,6 +13,8 @@ Parser::Parser(string filename_)
   if(file.is_open() == false) cerr << "File: " << filename << " did not open...\n";
 
   if(file.peek() == 'D' || file.peek() == 'S') {
+		if(file.peek() == 'D'){ filetype=DYNAMIC;cout<<"DYNAMIC\n"; }
+		if(file.peek() == 'S'){ filetype=STATIC;cout<<"STATIC\n"; }
     getline(file, line);
     //cout << "Workload File: " << line << "\n";
   }

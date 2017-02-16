@@ -7,6 +7,7 @@
 #include "../graph/graph.h"
 #include "../parser/writer.h"
 #include "../parser/parser.h"
+#include "../scc/cc.h"
 #include "job.h"
 #include "threadPool.h"
 
@@ -25,6 +26,7 @@ class Scheduler
     pthread_cond_t *schedulerCondition;
 
     Scheduler(Graph<Node> *graphOut, Graph<Node> *graphIn, scc<Component>* SCC, grail *G, int workers_ = 2);
+    Scheduler(Graph<Node> *graphOut, Graph<Node> *graphIn, cc *CC, int workers_ = 2);
     ~Scheduler();
 
     void Assign(Job);

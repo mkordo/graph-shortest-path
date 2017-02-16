@@ -11,12 +11,13 @@ Search::Search(Graph<Node> *graphOut_, Graph<Node> *graphIn_, scc<Component>* SC
 	graphIn = graphIn_;
 	SCC=SCC_;
 	G=G_;
-
+	CC=NULL;
+  t=1;
 	steps=0;
 	size = 0;
 	visitedIn = NULL;
 	visitedOut = NULL;
-
+	//cout<<"banana\n";
 	currentVersion=0;
 }
 
@@ -56,32 +57,58 @@ Search::~Search()
 
 int Search::ShortestPath(uint32_t nodeA, uint32_t nodeB, int version_)
 {
+	
   //cout<<"Searching from: "<<nodeA<<"to"<<nodeB<<endl;
 	if(graphOut->inBounds(nodeA)==false || graphIn->inBounds(nodeB)==false) return -1;
 	if(nodeA == nodeB) return 0;
 	if(graphOut->getNodeSize(nodeA)==false || graphIn->getNodeSize(nodeB)==false) return -1;
 	//SCC->printBelong();
-	if(SCC->belongs[nodeA]==SCC->belongs[nodeB]){
-					//cout<<"euruka!\n";
-					return ShortestPath( nodeA, nodeB, version_, SCC);
-					//cout<<result<<endl;
-					// result;
-	}
-	else{
-			if(G->maybe(SCC->belongs[nodeA],SCC->belongs[nodeB])){
-					//cout<<"maybe"<<endl;
-					//result=search.ShortestPath(graphOut, graphIn, me, neighbor);
-					//cout<<result<<endl;
+	if(t==1){ 
+			if(SCC->belongs[nodeA]==SCC->belongs[nodeB]){
+							//cout<<"euruka!\n";
+							return ShortestPath( nodeA, nodeB, version_, SCC);
+							//cout<<result<<endl;
+							// result;
 			}
 			else{
-				//cout<<"NO!"<<endl;
-				return -1;
-				//result=search->ShortestPath(graphOut, graphIn, me, neighbor);
-					//cout<<result<<endl;
-			}
+					if(G->maybe(SCC->belongs[nodeA],SCC->belongs[nodeB])){
+							//cout<<"maybe"<<endl;
+							//result=search.ShortestPath(graphOut, graphIn, me, neighbor);
+							//cout<<result<<endl;
+					}
+					else{
+						//cout<<"NO!"<<endl;
+						return -1;
+						//result=search->ShortestPath(graphOut, graphIn, me, neighbor);
+							//cout<<result<<endl;
+					}
 			
+			}
 	}
+	else{
+			if(CC->belongs[nodeA]==CC->belongs[nodeB]){
+							//cout<<"euruka!\n";
+							CC->print();
+							return ShortestPath( nodeA, nodeB, version_, CC);
+							//cout<<result<<endl;
+							// result;
+			}
+			else{
+				bool f=false;
+				uint32_t i;
+				for(i=0;i<CC->updateIndexSize;i++){
+						if( ( CC->UpdateIndex[0][i]==CC->belongs[nodeA] && CC->UpdateIndex[1][i]==CC->belongs[nodeB] ) || ( CC->UpdateIndex[0][i]==CC->belongs[nodeB] && CC->UpdateIndex[1][i]==CC->belongs[nodeA] ) )
+						{
+							f=true;
+							break;
+						}
+				}
+				if(f==false) return -1;
+				
+			}
+		
 	
+	}
 	//cout<<"i ll search now!\n";
 	Search::init(graphIn->size, graphOut->size, version_);
 	bool found = false;
@@ -141,19 +168,15 @@ bool Search::bfs(Graph<Node>* myGraph, Queue<uint32_t>& myQueue, bool* myVisited
 
 int Search::ShortestPath( uint32_t nodeA, uint32_t nodeB, int version_, scc<Component>* SCC)
 {
-	//cout<<"same scc\n";
-	//uint32_t *neigb,size,i;
-	//if(graphOut->validNode(nodeA)==false || graphIn.validNode(nodeB)==false) return -1;
+
 	Search::init(graphIn->size, graphOut->size, version_);
-	//bool found = false;
-  //if(SCC.belongs[nodeA]!=SCC.belongs[nodeB]) return -1;
-	frontSearch.push(nodeA);//cout<<"ch1\n";
-	backSearch.push(nodeB);//cout<<"ch3\n";
-	//cout<<"size "<<size<<"vs"<<nodeA<<"\n";
-	visitedOut[nodeA]=true;//cout<<"ch2\n";
+ 
+	frontSearch.push(nodeA);
+	backSearch.push(nodeB);
 	
-	visitedIn[nodeB]=true;//cout<<"ch4\n"; 
- // cout<<"BANANA!\n";
+	visitedOut[nodeA]=true;
+	
+	visitedIn[nodeB]=true;
 	while(!frontSearch.isEmpty() && !backSearch.isEmpty())
 	{
 		if(frontSearch.count() < backSearch.count()) { // Always search the smallest queue!
@@ -164,17 +187,6 @@ int Search::ShortestPath( uint32_t nodeA, uint32_t nodeB, int version_, scc<Comp
 			steps++;
 			if ( Search::bfs(graphIn, backSearch, visitedIn, visitedOut,SCC->belongs[nodeA], SCC->belongs) == true ) return steps;   //found a solution
 		}
-		//break;
-    
-		/*steps++;
-		//cout<<"\nFront\n";
-		if ( Search::bfs(graphOut, frontSearch, visitedOut, visitedIn, SCC.belongs[nodeA], SCC.belongs) == true ) return steps; //found a solution 
-
-		steps++;
-		//cout<<"\nBAck\n";
-		if ( Search::bfs(graphIn, backSearch, visitedIn, visitedOut,SCC.belongs[nodeA], SCC.belongs) == true ) return steps;   //found a solution
-
-		//break;*/
 	}
 
 	return -1;
@@ -183,7 +195,7 @@ int Search::ShortestPath( uint32_t nodeA, uint32_t nodeB, int version_, scc<Comp
 bool Search::bfs(Graph<Node>* myGraph, Queue<uint32_t>& myQueue, bool* myVisited, bool* theirVisited,uint32_t me,uint32_t*& belongs)
 {
 	uint32_t max,i,head,*neigb,size,j;
-
+  int *myVersion;
 	max=myQueue.count();
 	for(i=0;i<max;i++){
 
@@ -191,11 +203,14 @@ bool Search::bfs(Graph<Node>* myGraph, Queue<uint32_t>& myQueue, bool* myVisited
 
 		size=myGraph->getNodeSize(head);
 		neigb=myGraph->getNodeNeighbor(head);
+		myVersion=myGraph->getNodeVersion(head);
    // cout<<"head:"<<head<<" --";
 		for(j=0;j<size;j++){
 		//	cout<<" "<<neigb[j]<<"\t";
-		//	cout<<"("<<belongs[neigb[j]]<<","<<me<<")";
+		//	cout<<"("<<belongs[neigb[j]]<<","<<me<<")";\
 			if(belongs[neigb[j]]!=me){/*cout <<"avoiding "<<neigb[j]<<"!";*/ continue;}
+			if(myVersion[j] > currentVersion) continue;
+
 			if(myVisited[neigb[j]]==false){myVisited[neigb[j]]=true; myQueue.push(neigb[j]);}
 			if (theirVisited[neigb[j]]==true) return true;
 		}
@@ -205,5 +220,50 @@ bool Search::bfs(Graph<Node>* myGraph, Queue<uint32_t>& myQueue, bool* myVisited
 
 	return false;
 }
+
+Search::Search(Graph<Node>* graphOut_, Graph<Node>* graphIn_, cc* CC_){
+	cout<<"--BANANA!\n";
+	graphOut = graphOut_;
+	graphIn = graphIn_;
+	//CC_->print();
+	CC=CC_;
+	SCC=NULL;
+	G=NULL;
+
+	steps=0;
+	size = 0;
+	visitedIn = NULL;
+	visitedOut = NULL;
+	t=2;
+	currentVersion=0;
+}
+
+
+int Search::ShortestPath(uint32_t nodeA, uint32_t nodeB, int version_,cc *CC)
+{
+
+	Search::init(graphIn->size, graphOut->size, version_);
+ 
+	frontSearch.push(nodeA);
+	backSearch.push(nodeB);
+	
+	visitedOut[nodeA]=true;
+	
+	visitedIn[nodeB]=true;
+	while(!frontSearch.isEmpty() && !backSearch.isEmpty())
+	{
+		if(frontSearch.count() < backSearch.count()) { // Always search the smallest queue!
+			steps++;
+			if ( Search::bfs(graphOut, frontSearch, visitedOut, visitedIn, CC->belongs[nodeA], CC->belongs) == true ) return steps; //found a solution 
+		}
+		else {
+			steps++;
+			if ( Search::bfs(graphIn, backSearch, visitedIn, visitedOut, CC->belongs[nodeA], CC->belongs) == true ) return steps;   //found a solution
+		}
+	}
+
+	return -1;
+}
+
 
 

@@ -11,15 +11,17 @@
 #include "search/search.h"
 #include "stack/stack.h"
 #include "scc/grail.h"
+#include "scc/cc.h"
 #include "statistics/statistics.h"
 #include "scheduler/scheduler.h"
 
 using namespace std;
+extern int filetype;
 
 int cmd(int, char**, string&, string&);
 void createGraph(Graph<Node>*, Graph<Node>*, Graph<HashNode>*, string);
-void runQueries(Graph<Node>*, Graph<Node>*, Graph<HashNode>*, string, scc<Component>* SCC, grail *G);
-
+void runQueries(Parser &reader, Graph<Node>*, Graph<Node>*, Graph<HashNode>*, string, scc<Component>* SCC, grail *G);
+void runQueries_CC(Parser &reader,Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *graphDupl, string filename,cc *CC);
 Statistics stats(true);
 //Statistics stats(false);
 
@@ -44,30 +46,49 @@ int main(int argc, char** argv)
   //graphIn.print();
   stats.CreatedGraphs();
   
-  //--------------------------------------------------------------------
-  //for hypergraphs 
-  scc<Component> SCC;
-  SCC.init(max(graphOut.last,graphIn.last)+1);
-  //SCC.printBelong();return 0;
-	meTARZANyouJANE T(max(graphOut.last,graphIn.last)+1);
-	T.tarjan(graphOut,SCC);
-	//SCC.print();
-	//SCC.printBelong();
-	//for(i=0;i<max(graphOut.last,graphIn.last)+1;i++){
-	//		cout<<i<<"("<<T.findNodeSCC(i)<<")";
-	//}
-	//cout<<"BANANA\n";
-	Graph<Node> hyper;
-	Graph<HashNode> hyperDupl;
-  HyperGraph(hyper, hyperDupl, graphOut, SCC);
-  //cout<<"hypergraph size: ("<<hyper.last+1<<")\n";
-  //hyper.print();
-  grail G(hyper.last+1);
-  G.build(hyper);
-  cout<<"\n\n\n\n\n";
-  //--------------------------------------------------------------------
+  Parser reader(filenameQA);
   
-  runQueries(&graphOut, &graphIn, &graphDupl, filenameQA, &SCC, &G);
+  if (filetype==DYNAMIC){
+		cout<<"simple CCs\n";
+		cc CC(max(graphOut.last,graphIn.last)+1);
+		
+		CC.run(graphOut,graphIn);
+	
+		CC.print();
+	
+		runQueries_CC(reader,&graphOut, &graphIn, &graphDupl, filenameQA, &CC);
+		
+	}
+	else{
+			cout<<"SCCs\n";
+			//--------------------------------------------------------------------
+		  //for hypergraphs 
+		  scc<Component> SCC;
+		  SCC.init(max(graphOut.last,graphIn.last)+1);
+		  //SCC.printBelong();//return 0;
+			meTARZANyouJANE T(max(graphOut.last,graphIn.last)+1);
+			T.tarjan(graphOut,SCC);
+			//SCC.print();
+			//SCC.printBelong();
+			//for(i=0;i<max(graphOut.last,graphIn.last)+1;i++){
+			//		cout<<i<<"("<<T.findNodeSCC(i)<<")";
+			//}
+			//cout<<"BANANA\n";
+			Graph<Node> hyper;
+			Graph<HashNode> hyperDupl;
+		  HyperGraph(hyper, hyperDupl, graphOut, SCC);
+		  //cout<<"hypergraph size: ("<<hyper.last+1<<")\n";
+		  //hyper.print();
+		  grail G(hyper.last+1);
+		  G.build(hyper);
+		  //cout<<"\n\n\n\n\n";
+		  //--------------------------------------------------------------------
+		   runQueries(reader,&graphOut, &graphIn, &graphDupl, filenameQA, &SCC, &G);
+		  
+	}
+	
+ 
+ 
   //stats.ExecutedQueries();
 
   stats.totalNumOfVersions(graphOut.version);
@@ -95,11 +116,17 @@ void createGraph(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *g
 
 
 //void runQueries(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *graphDupl, string filename,)
-void runQueries(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *graphDupl, string filename, scc<Component>* SCC, grail *G)
+void runQueries(Parser &reader,Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *graphDupl, string filename, scc<Component>* SCC, grail *G)
 {
-  Scheduler taskManager(graphOut, graphIn, SCC, G, 2);
+  Scheduler taskManager(graphOut, graphIn, SCC, G, 1);
   Job newJob;
-  Parser reader(filename);
+  /*Parser reader(filename);
+  if (filetype==DYNAMIC){
+		cout<<"simple CCs\n";
+	}
+	else{
+			cout<<"SCCs\n";
+	}*/
   Writer output("results.txt");
   int oldType=-1;
 
@@ -149,34 +176,71 @@ void runQueries(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *gr
 }
 
 
-void runQueries2(Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *graphDupl, string filename)
+void runQueries_CC(Parser &reader,Graph<Node> *graphOut, Graph<Node> *graphIn, Graph<HashNode> *graphDupl, string filename,cc *CC)
 {
-  /*int type;
-  uint32_t me, neighbor;
-  Parser reader(filename);
+  Scheduler taskManager(graphOut, graphIn, CC, 1);
+  Job newJob;
+  /*Parser reader(filename);
+  if (filetype==DYNAMIC){
+		cout<<"simple CCs\n";
+	}
+	else{
+			cout<<"SCCs\n";
+	}*/
   Writer output("results.txt");
+  int oldType=-1;
 
-  Search search(graphOut, graphIn);
-  int result;
-
-  int version=0;
-
-  while( ( type = reader.getQuery(me, neighbor) ) != STOP ) {
+  while( ( newJob.type = reader.getQuery(newJob.me, newJob.neighbor) ) != STOP ) {
     //reader.printQuery(type, me, neighbor);
-    if(type == QUESTION) {
+    if(newJob.type == QUESTION) {
       stats.Query();
-      result = search.ShortestPath(me, neighbor, version);
-      output.writeInt(result);
+      newJob.version = graphOut->getVersion();
+      taskManager.Assign(newJob);
     }
-    else if(type == INSERTION) {
+    else if(newJob.type == INSERTION) {
       stats.Insertion();
-      if( graphDupl->insert(me, neighbor) == true ) {
-        graphOut->insert(me, neighbor);
-        graphIn->insert(neighbor, me);
+      
+      //---------------------------------------------------------------staff to add here
+      if( graphDupl->insert(newJob.me, newJob.neighbor) == true ) {
+        if(oldType == QUESTION) {
+          graphOut->changeVersion();
+          graphIn->changeVersion();
+        }
+        graphOut->insert(newJob.me, newJob.neighbor);
+        graphIn->insert(newJob.neighbor, newJob.me);
+        //cout<<"ck1\n";
+        CC->assign(newJob.me,newJob.neighbor, *graphOut, *graphIn);//cout<<"ck15\n";
+        //cout<<newJob.me<<" "<<newJob.neighbor<<endl;
+        cout<<"-------------------------------------------"<< endl;
+        CC->print();
+        //CC->init(max(graphOut->last,graphIn->last)+1);
+        //CC->run(*graphOut,*graphIn);
       }
-      else stats.duplicatesQA++;
+      else {stats.duplicatesQA++;cout << "GOTCHAAAAAAAA DUPL!!" << endl;}
     }
-  }*/
+    else if(newJob.type == GUST) {
+      stats.Gust();
+
+      // Ensure that all workers are blocked
+      taskManager.LockWorkers();
+        taskManager.WakeAll();
+      taskManager.UnlockWorkers();
+
+      taskManager.Wait();
+
+      taskManager.WriteResults(output);
+
+      taskManager.Init();
+    }
+    oldType = newJob.type;
+  }
+  cout << "\nAll queries are finished!\n";
+  
+  // Ensure that all workers are blocked
+  taskManager.LockWorkers();
+      taskManager.StopAll();
+      taskManager.WakeAll();
+  taskManager.UnlockWorkers();
 }
 
 

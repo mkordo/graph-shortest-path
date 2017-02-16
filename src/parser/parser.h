@@ -5,6 +5,9 @@
 #include <cstdint>  /* For uint32_t */
 #include <fstream>
 
+enum{DYNAMIC=1, STATIC=2};
+
+
 enum { QUESTION=0, INSERTION, GUST, STOP };
 
 class Parser

@@ -167,3 +167,9 @@ void WorkerTools::Print()
 	cout << "  Workers\' Condition : " << workerCondition << "\n";
 	cout << "  Scheduler\'s Condition : " << schedulerCondition << "\n\n";
 }
+
+
+void WorkerTools::SearchInit(Graph<Node> *graphOut, Graph<Node> *graphIn, cc* CC)
+{
+	search = new Search(graphOut, graphIn, CC);
+}

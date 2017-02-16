@@ -50,6 +50,7 @@ class WorkerTools
 
     void WorkerInit(int*, int*, pthread_mutex_t*, pthread_cond_t*);
     void SearchInit(Graph<Node> *graphOut, Graph<Node> *graphIn, scc<Component>* SCC, grail *G);
+    void SearchInit(Graph<Node> *graphOut, Graph<Node> *graphIn, cc* CC);
     void Print();
     void Assign(Job);
     void Lock();

@@ -202,3 +202,46 @@ void* jobExecute(void* info_)
 	//cout << "Thread Exiting...\n";
 	return NULL;
 }
+
+Scheduler::Scheduler(Graph<Node> *graphOut, Graph<Node> *graphIn, cc *CC, int workers_)
+{
+	int i;
+	workers = workers_;
+    workersTmp = 0;
+    id=0;
+
+    ////////////
+
+    jobsFinished = 0;    
+    schedulerMutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
+    schedulerCondition = (pthread_cond_t*) malloc(sizeof(pthread_cond_t));
+    if(schedulerMutex==NULL || schedulerCondition==NULL) {
+    	std::cerr << "Scheduler Constructor : Malloc Error\n" ;
+    }
+
+    pthread_mutex_init (schedulerMutex, NULL);
+    pthread_cond_init (schedulerCondition , NULL);
+
+    ////////////
+
+    Scheduler::Lock();
+
+	info = new WorkerTools [workers];
+	for(i=0; i<workers; i++) {
+		//cout<<"thread "<<i<<"initializing \n";
+		info[i].SearchInit(graphOut, graphIn, CC);
+		//cout<<"OK\n";
+		info[i].WorkerInit(&workers, &jobsFinished, schedulerMutex, schedulerCondition);
+		//cout<<"OK\n";
+		//info[i].Print();
+	}
+
+	Scheduler::Init();
+	pool = new ThreadPool ((void*) info, workers);
+
+	// Threads will wake the Scheduler when all of them are initialised
+	// That way we ensure that none of them will miss the signal for work by accident
+	Scheduler::Wait();
+	Scheduler::Init();
+	cout << "\nAll threads initialised\n\nExecuting Queries...\n";
+}

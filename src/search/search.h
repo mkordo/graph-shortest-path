@@ -5,6 +5,7 @@
 #include "../queue/queue.h"
 #include "../graph/graph.h"
 #include "../scc/grail.h"
+#include "../scc/cc.h"
 
 class Search
 {
@@ -14,7 +15,7 @@ class Search
     int currentVersion;
     bool *visitedIn;
     bool *visitedOut;
-
+		int t;
     Queue<uint32_t> frontSearch;
     Queue<uint32_t> backSearch;
 
@@ -23,12 +24,15 @@ class Search
     
     scc<Component>* SCC; 
     grail *G;
+    cc *CC;
     
     Search(Graph<Node>*, Graph<Node>*, scc<Component>* SCC, grail *G);
+    Search(Graph<Node>*, Graph<Node>*, cc* CC);
     ~Search();
 
     int ShortestPath(uint32_t, uint32_t, int);
     int ShortestPath(uint32_t, uint32_t, int, scc<Component>*);
+    int ShortestPath(uint32_t, uint32_t, int, cc* CC);
 
   private:
     void init(uint32_t, uint32_t, int);
